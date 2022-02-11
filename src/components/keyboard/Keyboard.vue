@@ -49,11 +49,13 @@
         const enterPermitted = key === 'enter' && this.guessedWord.length === this.targetWordLength
 
         if (!addLetterPermitted && !removeLetterPermitted) {
-          return
+          return;
         } else if (enterPermitted) {
           return this.$store.commit('FINAL_GUESS', this.guessedWord)
         } else if (key !== 'enter') {
           return this.guessLetter(key)
+        } else if (!enterPermitted) {
+          return this.$store.commit('TOGGLE_TOAST', 'Not enough letters')
         }
       },
       guessLetter(key) {

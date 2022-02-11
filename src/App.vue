@@ -1,6 +1,7 @@
 <template>
   <div id="app" :class="darkMode && 'dark'">
     <Nav/>
+    <Toast/>
     <Cover/>
     <ModalBackdrop/>
     <Modal/>
@@ -16,11 +17,12 @@
   import Cover from './components/cover/Cover.vue'
   import Modal from './components/modal/Modal.vue'
   import ModalBackdrop from './components/modal/ModalBackdrop.vue'
+  import Toast from './components/toast/Toast.vue'
 
   export default {
     name: 'App',
     components: {
-      Nav, Game, Keyboard, Cover, Modal, ModalBackdrop
+      Nav, Game, Keyboard, Cover, Modal, ModalBackdrop, Toast
     },
     computed: {
       darkMode() {

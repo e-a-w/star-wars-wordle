@@ -10,6 +10,11 @@ export default new Vuex.Store({
       lost: null,
       over: false
     },
+    winMessages: [
+      'Genius', 'Magnificent',
+      'Impressive', 'Splendid',
+      'Great', 'Phew'
+    ],
     stats: {
       maxStreak: 8,
       currentStreak: 2,
@@ -41,7 +46,11 @@ export default new Vuex.Store({
     currentRow: 0,
     hardMode: false,
     contrastClass: 'normal',
-    darkMode: false
+    darkMode: false,
+    toast: {
+      message: '',
+      show: false
+    }
   },
   getters: {
     guessCount(state) {
@@ -71,6 +80,14 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    TOGGLE_TOAST(state, message = '') {
+      const toast = {
+        show: !state.toast.show,
+        message
+      }
+
+      return state.toast = toast
+    },
     TOGGLE_CONTRAST(state) {
       return state.contrastClass = state.contrastClass === 'contrast' ? 'normal' : 'contrast'
     },
@@ -110,11 +127,18 @@ export default new Vuex.Store({
     NEW_ROW(state) {
       return state.currentRow++
     },
-    FINAL_GUESS(state, word) {
-      if (word === state.word) {
+    FINAL_GUESS(state, guessedWord) {
+      if (guessedWord === state.word) {
         this.commit('WIN_GAME')
         this.commit('UPDATE_STATS')
       } else {
+        if (state.hardMode) {
+          // all guessed letters must in REQUIRED LETTERS
+          // prev guessed letters must match REQUIRED INDICES
+          // 
+          console.log('VALIDATE GUESS')
+        }
+
         if (state.currentRow < 5) {
           this.commit('GUESS_LETTER', { reset: true })
           return this.commit('NEW_ROW', state.currentRow + 1)
@@ -125,9 +149,11 @@ export default new Vuex.Store({
       }
     },
     WIN_GAME(state) {
+      this.commit('TOGGLE_TOAST', state.winMessages[state.currentRow])
       return state.game = {won: true, lost: false, over: true}
     },
     LOSE_GAME(state) {
+      this.commit('TOGGLE_TOAST', state.word.toUpperCase())
       return state.game = {won: false, lost: true, over: true}
     },
     UPDATE_STATS(state) {
