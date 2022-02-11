@@ -1,5 +1,5 @@
 <template>
-  <div id="how-to-section">
+  <div v-if="show" id="how-to-section" :class="darkMode && dark">
     <h3>How To Play</h3>
 
     <section class="example-block">
@@ -11,7 +11,7 @@
     <section class="example-block">
       <h6>Examples</h6>
       <div class="example">
-        <div class="example-letter green-letter">W</div>
+        <div :class="['example-letter', 'success-letter', contrastClass]">W</div>
         <div class="example-letter">E</div>
         <div class="example-letter">A</div>
         <div class="example-letter">R</div>
@@ -22,7 +22,7 @@
 
       <div class="example">
         <div class="example-letter">P</div>
-        <div class="example-letter yellow-letter">I</div>
+        <div :class="['example-letter', 'wrong-position-letter', contrastClass]">I</div>
         <div class="example-letter">L</div>
         <div class="example-letter">L</div>
         <div class="example-letter">S</div>
@@ -34,7 +34,7 @@
         <div class="example-letter">V</div>
         <div class="example-letter">A</div>
         <div class="example-letter">G</div>
-        <div class="example-letter gray-letter">U</div>
+        <div class="example-letter wrong-letter">U</div>
         <div class="example-letter">E</div>
       </div>
 
@@ -49,13 +49,26 @@
 
 <script>
 export default {
-  name: 'HowTo'
+  name: 'HowTo',
+  computed: {
+    show() {
+      return this.$store.state.cover.view === 'howTo'
+    },
+    contrastClass() {
+      return this.$store.state.contrastClass
+    },
+    darkMode() {
+      return this.$store.state.darkMode
+    }
+  }
 }
 </script>
 
 <style scoped>
-  #how-to-section {
-    display: none;
+  h3 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
   }
 
   #how-to-section p, h6 {
@@ -70,6 +83,10 @@ export default {
   .example-block {
     padding: 15px 0 5px;
     border-bottom: 1px solid var(--light-gray);
+  }
+  
+  .dark .example-block {
+    border-bottom-color: var(--darker-gray);
   }
 
   .example-block:last-child {
@@ -89,6 +106,11 @@ export default {
     justify-content: center;
     align-items: center;
     font-weight: 700;
-    border: 1px solid black;
+    font-size: 30px;
+    border: 2px solid black;
+  }
+
+  .dark .example-letter {
+    border-color: var(--darker-gray);
   }
 </style>

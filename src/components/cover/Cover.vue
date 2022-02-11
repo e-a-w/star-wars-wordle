@@ -1,6 +1,6 @@
 <template>
-  <aside id="cover">
-    <div id="cover-close-icon" class="close-icon">
+  <aside v-if="cover.open" id="cover" :class="darkMode && 'dark'">
+    <div @click="closeCover" class="close-icon">
       <font-awesome-icon :icon="['far', 'window-close']"></font-awesome-icon>
     </div>
 
@@ -15,25 +15,37 @@
 
   export default {
     name: 'Cover',
-    components: { HowTo, Settings }
+    components: { HowTo, Settings },
+    methods: {
+      closeCover() {
+        return this.$store.commit('TOGGLE_COVER', !this.cover.open)
+      }
+    },
+    computed: {
+      cover() {
+        return this.$store.state.cover
+      },
+      darkMode() {
+        return this.$store.state.darkMode
+      }
+    }
   }
 </script>
 
 <style scoped>
   #cover {
-    display: none;
     position: fixed;
+    z-index: 10;
     top: 10px;
     height: 100vh;
     width: 95vw;
     max-width: 500px;
     background: white;
+    transition: var(--dark-transition);
   }
 
-  #cover h3 {
-    text-align: center;
-    font-size: 20px;
-    font-weight: 700;
+  #cover.dark {
+    background: var(--dark-bg);
   }
 
   .close-icon {
@@ -42,5 +54,9 @@
     right: 0;
     color: var(--dark-gray);
     cursor: pointer;
+  }
+
+  .dark .close-icon {
+    color: white;
   }
 </style>

@@ -1,63 +1,51 @@
 <template>
   <main>
-    <section id="row-1" class="row">
-      <div class="letter letter-1">A</div>
-      <div class="letter letter-2">A</div>
-      <div class="letter letter-3">A</div>
-      <div class="letter letter-4">A</div>
-      <div class="letter letter-5">A</div>
-      <div class="letter letter-6">A</div>
-    </section>
-    <section id="row-2" class="row">
-      <div class="letter letter-1">A</div>
-      <div class="letter letter-2">A</div>
-      <div class="letter letter-3">A</div>
-      <div class="letter letter-4">A</div>
-      <div class="letter letter-5">A</div>
-      <div class="letter letter-6">A</div>
-    </section>
-    <section id="row-3" class="row">
-      <div class="letter letter-1">A</div>
-      <div class="letter letter-2">A</div>
-      <div class="letter letter-3">A</div>
-      <div class="letter letter-4">A</div>
-      <div class="letter letter-5">A</div>
-      <div class="letter letter-6">A</div>
-    </section>
-    <section id="row-4" class="row">
-      <div class="letter letter-1">A</div>
-      <div class="letter letter-2">A</div>
-      <div class="letter letter-3">A</div>
-      <div class="letter letter-4">A</div>
-      <div class="letter letter-5">A</div>
-      <div class="letter letter-6">A</div>
-    </section>
-    <section id="row-5" class="row">
-      <div class="letter letter-1">A</div>
-      <div class="letter letter-2">A</div>
-      <div class="letter letter-3">A</div>
-      <div class="letter letter-4">A</div>
-      <div class="letter letter-5">A</div>
-      <div class="letter letter-6">A</div>
-    </section>
-    <section id="row-6" class="row">
-      <div class="letter letter-1">A</div>
-      <div class="letter letter-2">A</div>
-      <div class="letter letter-3">A</div>
-      <div class="letter letter-4">A</div>
-      <div class="letter letter-5">A</div>
-      <div class="letter letter-6">A</div>
-    </section>
+    <section v-for="(row, rowIdx) in guesses" :key="rowIdx" class="row">
+      <div
+        v-for="(letter, idx) in row"
+        :class="['letter', letterColor(letter, idx, rowIdx), contrastClass, darkMode && 'dark']"
+        :key="idx"
+      >
+        {{letter}}
+      </div>
+     </section>
   </main>
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
-    name: 'Game'
+    name: 'Game',
+    computed: {
+      ...mapState(['guesses', 'word', 'currentRow', 'game', 'contrastClass', 'darkMode'])
+    },
+    methods: {
+      letterColor(letter, idx, row) {
+        const waitingToGuess = (letter === '' || row >= this.currentRow) && !this.game.over
+        const unguessedLetters = this.game.over && row > this.currentRow
+
+        if (waitingToGuess || unguessedLetters) {
+          return
+        }
+
+        if (this.word[idx] === letter) {
+          return 'success-letter'
+        } else if (this.word.includes(letter)) {
+          return 'wrong-position-letter'
+        } else {
+          return 'wrong-letter'
+        }
+      }
+    }
   }
 </script>
 
 <style scoped>
+  main {
+    position: relative;
+  }
+
   .row {
     width: 95vw;
     max-width: 500px;
@@ -73,8 +61,10 @@
     justify-content: center;
     align-items: center;
     font-weight: 700;
-    color: white;
-    background: var(--green);
-    border: 1px solid var(--light-gray);
+    border: 2px solid var(--light-gray);
+  }
+
+  .letter.dark {
+    border: 2px solid var(--dark-gray);
   }
 </style>

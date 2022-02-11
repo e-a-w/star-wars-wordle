@@ -3,52 +3,12 @@
     <h3>Guess Distribution</h3>
 
     <div id="guess-chart">
-      <div class="chart-row">
+      <div v-for="(val, idx) in guessDistribution" :key="idx" class="chart-row">
         <span class="chart-num">
-          1
+          {{idx + 1}}
         </span>
-        <span class="chart-bar">
-          0
-        </span>
-      </div>
-      <div class="chart-row">
-        <span class="chart-num">
-          2
-        </span>
-        <span class="chart-bar">
-          0
-        </span>
-      </div>
-      <div class="chart-row">
-        <span class="chart-num">
-          3
-        </span>
-        <span class="chart-bar">
-          0
-        </span>
-      </div>
-      <div class="chart-row">
-        <span class="chart-num">
-          4
-        </span>
-        <span class="chart-bar">
-          3
-        </span>
-      </div>
-      <div class="chart-row">
-        <span class="chart-num">
-          5
-        </span>
-        <span class="chart-bar">
-          1
-        </span>
-      </div>
-      <div class="chart-row">
-        <span class="chart-num">
-          6
-        </span>
-        <span class="chart-bar">
-          0
+        <span :class="['chart-bar', darkMode && 'dark']" :style="{width: `${val.guessPercent}%`}">
+          {{val.timesGuessed}}
         </span>
       </div>
     </div>
@@ -56,8 +16,29 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+
   export default {
-    name: 'GuessChart'
+    name: 'GuessChart',
+    computed: {
+      guessDistribution() {
+        const dist = []
+        const stats = this.$store.state.stats.guessDistribution
+
+        for (let guessNum in stats) {
+          dist.push({
+            timesGuessed: stats[guessNum],
+            guessPercent: Math.round((stats[guessNum] / this.wonGames) * 100)
+          })
+        }
+
+        return dist
+      },
+      darkMode() {
+        return this.$store.state.darkMode
+      },
+      ...mapGetters(['wonGames'])
+    }
   }
 </script>
 
@@ -66,7 +47,12 @@
     padding: 10px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 15px;
+  }
+
+  h3 {
+    font-size: 20px;
   }
 
   .chart-row {
@@ -84,12 +70,15 @@
   }
 
   .chart-bar {
-    width: 60%;
     padding: 5px;
     display: flex;
     justify-content: flex-end;
     font-weight: 700;
     color: white;
     background: var(--dark-gray);
+  }
+
+  .chart-bar.dark {
+    background: var(--darker-gray);
   }
 </style>

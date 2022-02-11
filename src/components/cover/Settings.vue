@@ -1,68 +1,114 @@
 <template>
-  <div id="settings-section">
+  <div v-if="show">
     <h3>Settings</h3>
 
-    <section class="settings-block">
+    <section v-for="setting in settings" :key="setting.key" :class="['settings-block', darkMode && 'dark']">
       <div class="left-setting">
-        <p>Hard Mode</p>
-        <p class="sub">Any revealed hints must be used in subsequent guesses</p>
+        <p>{{setting.name}}</p>
+        <p :class="['sub', darkMode && 'dark']">
+          {{setting.sub}}
+        </p>
       </div>
-      <div class="settings-toggle">
-        <label class="toggle">
-          <input type="checkbox"/>
-          <span class="slider"></span>
+
+      <div v-if="setting.toggle" class="settings-toggle">
+        <label :class="['toggle', darkMode && 'dark']">
+          <input @click="toggleSetting(setting.key)" type="checkbox" v-model="setting.checked"/>
+          <span :class="['slider', contrastClass]"></span>
         </label>
       </div>
-    </section>
 
-    <section class="settings-block">
-      <div class="left-setting">
-        <p>Dark Theme</p>
-      </div>
-      <div class="settings-toggle">
-        <label class="toggle">
-          <input type="checkbox"/>
-          <span class="slider"></span>
-        </label>
-      </div>
-    </section>
-
-    <section class="settings-block">
-      <div class="left-setting">
-        <p>Color Blind Mode</p>
-        <p class="sub">High contrast colors</p>
-      </div>
-      <div class="settings-toggle">
-        <label class="toggle">
-          <input type="checkbox"/>
-          <span class="slider"></span>
-        </label>
-      </div>
-    </section>
-
-    <section class="settings-block">
-      <div class="left-setting">
-        <p>Feedback</p>
-        <p class="sub">High contrast colors</p>
-      </div>
-      <div class="settings-toggle">
+      <div v-else class="settings-toggle">
         <a href="#">Email</a>
         <span class="link-style">|</span>
         <a href="#">Twitter</a>
-      </div>
+      </div> 
     </section>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'Settings'
+  name: 'Settings',
+  data() {
+    return {
+      initialSettings: [
+        {
+          key: 'hard',
+          name: 'Hard Mode',
+          sub: 'Any revealed hints must be used in subsequent guesses.',
+          toggle: true
+        },
+        {
+          key: 'dark',
+          name: 'Dark Theme',
+          sub: '',
+          toggle: true
+        },
+        {
+          key: 'contrast',
+          name: 'Color Blind Mode',
+          sub: 'High contrast colors.',
+          toggle: true
+        },
+        {
+          key: 'feedback',
+          name: 'Feedback',
+          sub: '',
+          toggle: false
+        }
+      ]
+    }
+  },
+  computed: {
+    show() {
+      return this.$store.state.cover.view === 'settings'
+    },
+    settings() {
+      return this.initialSettings.map(setting => {
+        if (setting.toggle) {
+          if (setting.key === 'contrast') {
+            setting.checked = this.contrastClass === 'contrast'
+          } else if (setting.key === 'hard') {
+            setting.checked = this.hardMode
+          } else if (setting.key === 'dark') {
+            setting.checked = this.darkMode
+          }
+        }
+
+        return setting;
+      })
+    },
+    ...mapState(['contrastClass', 'hardMode', 'darkMode'])
+  },
+  methods: {
+    toggleSetting(key) {
+      if (key === 'hard') {
+        return this.$store.commit('TOGGLE_HARD_MODE')
+      } else if (key === 'contrast') {
+       return this.$store.commit('TOGGLE_CONTRAST')
+      } else if (key === 'dark') {
+        return this.$store.commit('TOGGLE_DARK_MODE')
+      }
+    },
+  }
 }
 </script>
 
 <style scoped>
-  #settings-section {
-    display: none;
+  h3 {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .link-style {
+    padding: 0 5px;
+  }
+
+  .sub.dark {
+    color: var(--dark-gray);
   }
 
   .settings-block {
@@ -75,6 +121,14 @@ export default {
     border-bottom: 1px solid var(--light-gray);
   }
 
+  .settings-block.dark {
+    border-bottom-color: var(--darker-gray);
+  }
+
+  .settings-block .sub.dark {
+    color: var(--mid-gray);
+  }
+
   .settings-block .sub {
     font-size: 14px;
   }
@@ -82,11 +136,15 @@ export default {
   .toggle {
     position: relative;
     height: 20px;
-    width: 45px;
+    width: 30px;
     padding: 3px;
     display: inline-flex;
     background: var(--dark-gray);
     border-radius: 5px;
+  }
+
+  .toggle.dark {
+    background: var(--darker-gray);
   }
 
   .toggle input {
@@ -105,13 +163,16 @@ export default {
     background: white;
     -webkit-transition: .4s;
     transition: .4s;
-    cursor: pointer;
   }
 
   input:checked + .slider {
     position: relative;
     left: 100%;
     transform: translateX(-100%);
-    background-color: var(--green);
+    background: var(--green);
+  }
+
+  input:checked + .slider.contrast {
+    background: var(--orange);
   }
 </style>

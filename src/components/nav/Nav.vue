@@ -1,29 +1,44 @@
 <template>
   <nav>
-    <div v-on:click="openCover" class="nav-icon">
-      <font-awesome-icon :icon="['far', 'question-circle']"></font-awesome-icon>
+    <div class="nav-icon">
+      <font-awesome-icon @click="openCover('howTo')" :icon="['far', 'question-circle']"></font-awesome-icon>
     </div>
     <h1>WORDLE</h1>
     <div class="right-icons">
       <div class="nav-icon">
-        <font-awesome-icon :icon="['fas', 'chart-bar']"></font-awesome-icon>
+        <font-awesome-icon @click="openModal" :icon="['fas', 'chart-bar']"></font-awesome-icon>
       </div>
       <div class="nav-icon">
-        <font-awesome-icon :icon="['fas', 'cog']"></font-awesome-icon>
+        <font-awesome-icon @click="openCover('settings')" :icon="['fas', 'cog']"></font-awesome-icon>
       </div>
     </div>
   </nav>
 </template>
 
 <script>
-export default {
-  name: 'Nav',
-  methods: {
-    openCover: () => {
-      console.log('open sesame')
+  export default {
+    name: 'Nav',
+    methods: {
+      openCover(view) {
+        const payload = {
+          open: !this.cover.open,
+          view: view
+        }
+        return this.$store.commit('TOGGLE_COVER', payload)
+      },
+      openModal() {
+        return this.$store.commit('TOGGLE_MODAL', !this.modalOpen)
+      }
+    },
+    computed: {
+      cover() {
+        return this.$store.state.cover
+      },
+      modalOpen() {
+        return this.$store.state.modalOpen
+      }
     }
   }
-}
 </script>
 
 <style scoped>

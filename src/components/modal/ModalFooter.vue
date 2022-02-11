@@ -1,15 +1,15 @@
 <template>
-  <section id="modal-footer">
+  <section v-if="gameOver" id="modal-footer">
     <div id="next-game">
       <h3>Next Wordle</h3>
       <div id="countdown">
-        03:32:48
+        {{this.countdown}}
       </div>
     </div>
     <div id="share">
       <div id="share-btn">
         <span>Share</span>
-        <i class="fas fa-share-alt"></i>
+        <font-awesome-icon :icon="['fas', 'share-alt']"></font-awesome-icon>
       </div>
     </div>
   </section>
@@ -17,16 +17,61 @@
 
 <script>
   export default {
-    name: 'ModalFooter'
+    name: 'ModalFooter',
+    data() {
+      return {
+        countdown: null
+      }
+    },
+    computed: {
+      gameOver() {
+        return this.$store.state.game.over
+      }
+    },
+    methods: {
+      startTimer() {
+        setInterval(() => {
+          this.findTime()
+        }, 1000)
+      },
+      findTime() {
+        const tomorrow = new Date()
+        tomorrow.setHours(0, 0, 0, 0)
+        tomorrow.setDate(tomorrow.getDate() + 1)
+        const today = new Date().getTime()
+        const timeUntil = tomorrow - today
+
+        let min = Math.floor((timeUntil / 1000 / 60) % 60);
+        let hour = Math.floor((timeUntil / (1000 * 60 * 60)) % 24);
+        let sec = Math.floor((timeUntil / 1000) % 60)
+
+        const times = [hour, min, sec].map(time => {
+          return time < 10 ? `0${time}` : time
+        })
+
+        return this.countdown = `${times[0]}:${times[1]}:${times[2]}`
+      }
+    },
+    created() {
+      this.findTime()
+      this.startTimer()
+    },
+    beforeDestroy() {
+      clearInterval(this.countdown)
+    }
   }
 </script>
 
 <style scoped>
+  h3 {
+      font-size: 20px;
+    }
+
   #modal-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 10px 0;
   }
 
   #next-game {
@@ -46,6 +91,10 @@
 
   #share-btn {
     padding: 15px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
     font-weight: 700;
     color: white;
     background: var(--green);

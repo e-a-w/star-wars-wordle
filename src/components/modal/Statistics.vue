@@ -3,38 +3,12 @@
     <h3>Statistics</h3>
 
     <div id="stat-boxes">
-      <div class="stat">
+      <div v-for="stat in stats" :key="stat.name" class="stat">
         <span class="stat-num">
-          3
+          {{stat.num}}
         </span>
         <span class="stat-name">
-          Played
-        </span>
-      </div>
-
-      <div class="stat">
-        <span class="stat-num">
-          100
-        </span>
-        <span class="stat-name">
-          Win %
-        </span>
-      </div>
-
-      <div class="stat">
-        <span class="stat-num">
-          3
-        </span>
-        <span class="stat-name">
-          Current Streak
-        </span>
-      </div>
-      <div class="stat">
-        <span class="stat-num">
-          3
-        </span>
-        <span class="stat-name">
-          Max Streak
+          {{stat.name}}
         </span>
       </div>
     </div>
@@ -42,12 +16,29 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+
   export default {
-    name: 'Statistics'
+    name: 'Statistics',
+    computed: {
+      stats() {
+        return [
+          {name: 'Played', num: this.totalGames},
+          {name: 'Win %', num: this.winPercent},
+          {name: 'Current Streak', num: this.currentStreak},
+          {name: 'Max Streak', num: this.maxStreak}
+        ]
+      },
+      ...mapGetters(['totalGames','maxStreak', 'currentStreak', 'winPercent'])
+    }
   }
 </script>
 
 <style scoped>
+  h3 {
+      font-size: 20px;
+    }
+
   #stat-boxes {
     display: flex;
     justify-content: center;

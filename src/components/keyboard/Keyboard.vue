@@ -1,47 +1,66 @@
 <template>
   <footer>
-    <section class="keyboard-row">
-      <div class="keyboard-letter">Q</div>
-      <div class="keyboard-letter">W</div>
-      <div class="keyboard-letter">E</div>
-      <div class="keyboard-letter">R</div>
-      <div class="keyboard-letter">T</div>
-      <div class="keyboard-letter">Y</div>
-      <div class="keyboard-letter">U</div>
-      <div class="keyboard-letter">I</div>
-      <div class="keyboard-letter">O</div>
-      <div class="keyboard-letter">P</div>
-    </section>
-    <section class="keyboard-row">
-      <div class="keyboard-letter">A</div>
-      <div class="keyboard-letter">S</div>
-      <div class="keyboard-letter">D</div>
-      <div class="keyboard-letter">F</div>
-      <div class="keyboard-letter">G</div>
-      <div class="keyboard-letter">H</div>
-      <div class="keyboard-letter">J</div>
-      <div class="keyboard-letter">K</div>
-      <div class="keyboard-letter">L</div>
-    </section>
-    <section class="keyboard-row">
-      <div class="keyboard-letter double-key">Enter</div>
-      <div class="keyboard-letter">Z</div>
-      <div class="keyboard-letter">X</div>
-      <div class="keyboard-letter">C</div>
-      <div class="keyboard-letter">V</div>
-      <div class="keyboard-letter">B</div>
-      <div class="keyboard-letter">N</div>
-      <div class="keyboard-letter">M</div>
-      <div class="keyboard-letter double-key">
-        <font-awesome-icon :icon="['fas', 'backspace']"></font-awesome-icon>
+    <section v-for="(row, idx) in rows" :key="idx" class="keyboard-row">
+      <div
+        v-for="key in row"
+        :key="key"
+        :class="[keyClass(key), darkMode && 'dark']"
+        @click="handleClick(key, )"
+      >
+        {{key === 'back' ? '' : key}}
+        <font-awesome-icon  v-if="key === 'back'" :icon="['fas', 'backspace']"></font-awesome-icon>
       </div>
     </section>
   </footer>
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
-    name: 'Keyboard'
+    name: 'Keyboard',
+    data() {
+      return {
+        rows: [
+          ['q','w','e','r','t','y','u','i','o','p','a','s'],
+          ['a','s','d','f','g','h','j','k','l'],
+          ['enter','z','x','c','v','b','n','m','back']
+        ]
+      }
+    },
+    computed: {
+      targetWordLength() {
+        return this.word.length
+      },
+      ...mapState(['currentRow', 'guessedWord', 'word', 'game', 'darkMode'])
+    },
+    methods: {
+      keyClass(key) {
+        return [
+            'keyboard-letter',
+            {'double-key': ['enter', 'back'].includes(key)}
+          ]
+      },
+      handleClick(key) {
+        if (this.game.over) return;
+
+        const addLetterPermitted = ['back', 'enter'].includes(key) || this.guessedWord.length < this.targetWordLength
+        const removeLetterPermitted = key === 'back' && this.guessedWord.length <= this.targetWordLength
+        const enterPermitted = key === 'enter' && this.guessedWord.length === this.targetWordLength
+
+        if (!addLetterPermitted && !removeLetterPermitted) {
+          return
+        } else if (enterPermitted) {
+          return this.$store.commit('FINAL_GUESS', this.guessedWord)
+        } else if (key !== 'enter') {
+          return this.guessLetter(key)
+        }
+      },
+      guessLetter(key) {
+        const payload = { letter: key, add: key !== 'back' }
+        return this.$store.commit('GUESS_LETTER', payload)
+      },
+    }
   }
 </script>
 
@@ -60,8 +79,8 @@
   }
 
   .keyboard-letter {
-    height: 60px;
-    width: 40px;
+    height: 55px;
+    width: 45px;
     margin: 3px;
     display: flex;
     justify-content: center;
@@ -73,8 +92,12 @@
     cursor: pointer;
   }
 
+  .keyboard-letter.dark {
+    background: var(--dark-gray);
+  }
+
   .double-key {
-    width: 65px;
+    width: 70px;
   }
 
   .fa-backspace {

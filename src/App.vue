@@ -1,7 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app" :class="darkMode && 'dark'">
     <Nav/>
     <Cover/>
+    <ModalBackdrop/>
     <Modal/>
     <Game/>
     <Keyboard/>
@@ -14,11 +15,17 @@
   import Keyboard from './components/keyboard/Keyboard.vue'
   import Cover from './components/cover/Cover.vue'
   import Modal from './components/modal/Modal.vue'
+  import ModalBackdrop from './components/modal/ModalBackdrop.vue'
 
   export default {
     name: 'App',
     components: {
-      Nav, Game, Keyboard, Cover, Modal
+      Nav, Game, Keyboard, Cover, Modal, ModalBackdrop
+    },
+    computed: {
+      darkMode() {
+        return this.$store.state.darkMode
+      }
     }
   }
 </script>
@@ -36,9 +43,14 @@
     font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
     font-size: 24px;
     --light-gray: lightgray;
+    --mid-gray: rgb(163, 161, 161);
     --dark-gray: rgb(116, 116, 116);
+    --darker-gray: rgb(83, 83, 83);
     --green: rgb(90, 175, 90);
     --yellow: rgb(201, 201, 119);
+    --orange: rgb(235, 162, 27);
+    --light-blue: rgb(142, 205, 226);
+    --dark-bg: rgb(19, 19, 19);
   }
 
   #app {
@@ -51,23 +63,42 @@
     text-transform: uppercase;
   }
 
+  #app.dark {
+    color: white;
+    background: var(--dark-bg);
+  }
+
   a, a:active, a:visited, a:focus, a:hover, .link-style {
     color: var(--dark-gray);
     font-size: .9em;
   }
 
-  .green-letter {
+  .success-letter, .wrong-position-letter, .wrong-letter {
     color: white;
+  }
+
+  .success-letter.normal {
     background: var(--green);
   }
 
-  .yellow-letter {
-    color: white;
+  .success-letter.contrast {
+    background: var(--orange);
+  }
+
+  .wrong-position-letter.normal {
     background: var(--yellow);
   }
 
-  .gray-letter {
-    color: white;
+  .wrong-position-letter.contrast {
+    background: var(--light-blue);
+  }
+
+  .wrong-letter.normal {
     background: var(--dark-gray);
+  }
+
+  .blank_letter {
+    color: black;
+    background: white;
   }
 </style>
