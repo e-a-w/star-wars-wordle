@@ -79,7 +79,7 @@
     color: white;
   }
 
-  .success-letter.normal {
+  .success-letter {
     background: var(--green);
   }
 
@@ -87,7 +87,7 @@
     background: var(--orange);
   }
 
-  .wrong-position-letter.normal {
+  .wrong-position-letter {
     background: var(--yellow);
   }
 
@@ -95,7 +95,7 @@
     background: var(--light-blue);
   }
 
-  .wrong-letter.normal {
+  .wrong-letter {
     background: var(--dark-gray);
   }
 

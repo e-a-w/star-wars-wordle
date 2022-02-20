@@ -24,7 +24,7 @@ export default new Vuex.Store({
         2: 22,
         3: 33,
         4: 44,
-        5: 55,
+        5: 66,
         6: 66
       }
     },

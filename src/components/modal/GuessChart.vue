@@ -7,7 +7,14 @@
         <span class="chart-num">
           {{idx + 1}}
         </span>
-        <span :class="['chart-bar', darkMode && 'dark']" :style="{width: `${val.guessPercent}%`}">
+        <span
+          :class="[
+            'chart-bar',
+            darkMode && 'dark',
+            val.highest && 'highest'
+          ]"
+          :style="{width: `${val.guessPercent}%`}"
+        >
           {{val.timesGuessed}}
         </span>
       </div>
@@ -32,7 +39,17 @@
           })
         }
 
-        return dist
+        const highest = Math.max(...dist.map(stat => stat.guessPercent))
+        let found = false;
+
+        dist.reverse().forEach(stat => {
+          if(stat.guessPercent === highest & !found) {
+            found = true
+            return stat.highest = true
+          }
+        })
+
+        return dist.reverse()
       },
       darkMode() {
         return this.$store.state.darkMode
@@ -80,5 +97,13 @@
 
   .chart-bar.dark {
     background: var(--darker-gray);
+  }
+
+  .chart-bar.highest:last-child {
+    background: var(--green);
+  }
+
+  .chart-bar.highest.contrast {
+    background: var(--orange);
   }
 </style>
