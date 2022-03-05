@@ -64,13 +64,20 @@
 
   .letter {
     margin: 3px;
-    height: 60px;
-    width: 60px;
+    height: 50px;
+    width: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: 700;
     border: 2px solid var(--light-gray);
+  }
+
+  @media only screen and (min-width: 539px) {
+    .letter {
+      height: 60px;
+      width: 60px;
+    }
   }
 
   .letter.dark {

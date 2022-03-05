@@ -1,14 +1,28 @@
 <template>
   <footer>
-    <section v-for="(row, idx) in rows" :key="idx" class="keyboard-row">
-      <div
-        v-for="key in row"
-        :key="key"
-        :class="[keyClass(key), darkMode && 'dark']"
-        @click="handleClick(key)"
-      >
-        {{key === 'back' ? '' : key}}
-        <font-awesome-icon  v-if="key === 'back'" :icon="['fas', 'backspace']"></font-awesome-icon>
+    <section class="alpha-keys">
+      <div v-for="(row, idx) in alphaRows" :key="idx" class="keyboard-row">
+        <div
+          v-for="key in row"
+          :key="key"
+          :class="[keyClass(key), darkMode && 'dark']"
+          @click="handleClick(key)"
+        >
+          {{key === 'back' ? '' : key}}
+          <font-awesome-icon  v-if="key === 'back'" :icon="['fas', 'backspace']"></font-awesome-icon>
+        </div>
+      </div>
+    </section>
+    <section class="num-keys">
+      <div v-for="(row, idx) in numRows" :key="idx" class="keyboard-row">
+        <div
+          v-for="key in row"
+          :key="key"
+          :class="[keyClass(key), darkMode && 'dark']"
+          @click="handleClick(key)"
+        >
+          {{key}}
+        </div>
       </div>
     </section>
   </footer>
@@ -21,10 +35,15 @@
     name: 'Keyboard',
     data() {
       return {
-        rows: [
-          ['q','w','e','r','t','y','u','i','o','p','a','s'],
+        alphaRows: [
+          ['q','w','e','r','t','y','u','i','o','p'],
           ['a','s','d','f','g','h','j','k','l'],
           ['enter','z','x','c','v','b','n','m','back']
+        ],
+        numRows: [
+          [7, 8, 9],
+          [4, 5, 6],
+          [0, 1, 2, 3],
         ]
       }
     },
@@ -69,10 +88,11 @@
 <style scoped>
   footer {
     width: 95vw;
-    max-width: 500px;
     display: flex;
-    padding-bottom: 5px;
-    flex-direction: column;
+    flex-direction: column-reverse;
+    justify-content: center;
+    gap: .25rem;
+    padding-bottom: 1rem;
   }
 
   .keyboard-row {
@@ -81,9 +101,10 @@
   }
 
   .keyboard-letter {
-    height: 55px;
-    width: 45px;
+    height: 35px;
+    width: 25px;
     margin: 3px;
+    padding: 1px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -92,6 +113,34 @@
     background: var(--light-gray);
     border-radius: 4px;
     cursor: pointer;
+  }
+
+@media only screen and (min-width: 539px) {
+  footer {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+}
+
+@media only screen and (min-width: 643px) {
+  footer {
+    padding-bottom: 12px;
+  }
+  .keyboard-letter {
+    height: 45px;
+    width: 35px;
+  }
+}
+
+@media only screen and (min-width: 756px) {
+    footer {
+      padding-bottom: 5px;
+    }
+    .keyboard-letter {
+      padding: 0;
+      height: 55px;
+      width: 45px;
+    }
   }
 
   .keyboard-letter.dark {
