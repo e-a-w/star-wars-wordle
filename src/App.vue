@@ -28,6 +28,9 @@
       darkMode() {
         return this.$store.state.darkMode
       }
+    },
+    created() {
+      this.$store.dispatch('fetchWord')
     }
   }
 </script>

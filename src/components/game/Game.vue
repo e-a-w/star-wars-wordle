@@ -3,7 +3,13 @@
     <section v-for="(row, rowIdx) in guesses" :key="rowIdx" class="row">
       <div
         v-for="(letter, idx) in row"
-        :class="['letter', letterColor(letter, idx, rowIdx), contrastClass, darkMode && 'dark']"
+        :class="[
+          'letter',
+          letterColor(letter, idx, rowIdx),
+          letterType(idx),
+          contrastClass,
+          darkMode && 'dark'
+        ]"
         :key="idx"
       >
         {{letter}}
@@ -21,6 +27,9 @@
       ...mapState(['guesses', 'word', 'currentRow', 'game', 'contrastClass', 'darkMode'])
     },
     methods: {
+      letterType(idx) {
+        return !this.word[idx]?.match(/([a-zA-Z0-9])/g) && 'misc-char'
+      },
       letterColor(letter, idx, row) {
         const waitingToGuess = (letter === '' || row >= this.currentRow) && !this.game.over
         const unguessedLetters = this.game.over && row > this.currentRow
@@ -66,5 +75,15 @@
 
   .letter.dark {
     border: 2px solid var(--dark-gray);
+  }
+
+  .letter.misc-char {
+    color: black;
+    border: none;
+    background: none;
+  }
+
+  .letter.misc-char.dark {
+    color: white;
   }
 </style>

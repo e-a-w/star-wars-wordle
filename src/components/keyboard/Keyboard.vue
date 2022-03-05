@@ -5,7 +5,7 @@
         v-for="key in row"
         :key="key"
         :class="[keyClass(key), darkMode && 'dark']"
-        @click="handleClick(key, )"
+        @click="handleClick(key)"
       >
         {{key === 'back' ? '' : key}}
         <font-awesome-icon  v-if="key === 'back'" :icon="['fas', 'backspace']"></font-awesome-icon>
