@@ -1,23 +1,20 @@
 <template>
-    <div v-if="modalOpen" @click="closeModal" id="modal-backdrop" :class="darkMode && 'dark'"></div>
+    <div v-if="modal.open" @click="closeModal" id="modal-backdrop" :class="darkMode && 'dark'"></div>
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
     name: 'ModalBackdrop',
     methods: {
       closeModal() {
-        this.$store.commit('TOGGLE_MODAL', !this.modalOpen)
+        this.$store.commit('TOGGLE_MODAL')
       }
     },
     computed: {
-      modalOpen() {
-        return this.$store.state.modalOpen
-      },
-      darkMode() {
-        return this.$store.state.darkMode
-      }
-    }
+      ...mapState(['modal', 'darkMode'])
+    },
   }
 </script>
 

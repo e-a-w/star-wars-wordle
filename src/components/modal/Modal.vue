@@ -1,12 +1,20 @@
 <template>
-  <aside id="modal" v-if="modalOpen" :class="darkMode && 'dark'">
+  <aside
+    id="modal"
+    v-if="modal.open"
+    :class="[darkMode && 'dark', modal.view]"
+  >
     <div @click="closeModal" class="close-icon">
       <font-awesome-icon :icon="['far', 'window-close']"></font-awesome-icon>
     </div>
 
-    <Statistics />
-    <GuessChart />
-    <ModalFooter />
+    <div v-if="modal.view === 'stats'">
+      <Statistics />
+      <GuessChart />
+      <ModalFooter />
+    </div>
+
+    <Confirmation v-if="modal.view === 'confirmation'" />
   </aside>
 </template>
 
@@ -14,22 +22,24 @@
   import Statistics from './Statistics.vue'
   import GuessChart from './GuessChart.vue'
   import ModalFooter from './ModalFooter.vue'
+  import Confirmation from './Confirmation.vue'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'Modal',
-    components: { Statistics, GuessChart, ModalFooter },
+    components: {
+      Statistics,
+      GuessChart,
+      ModalFooter,
+      Confirmation
+    },
     methods: {
       closeModal() {
-        this.$store.commit('TOGGLE_MODAL', !this.modalOpen)
+        this.$store.commit('TOGGLE_MODAL')
       }
     },
     computed: {
-      modalOpen() {
-        return this.$store.state.modalOpen
-      },
-      darkMode() {
-        return this.$store.state.darkMode
-      }
+      ...mapState(['modal', 'darkMode'])
     }
   }
 </script>
@@ -38,8 +48,7 @@
   #modal {
     position: fixed;
     z-index: 11;
-    top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-60%);
     width: 95vw;
     max-width: 500px;
     padding: 30px 0;
@@ -54,8 +63,17 @@
     filter: drop-shadow(2px 2px 10px var(--light-gray));
   }
 
+  #modal.stats {
+    top: 50vh;
+  }
+
+  #modal.confirmation {
+    top: 20vh;
+  }
+
   #modal.dark {
     background: var(--dark-bg);
+    border: 1px solid var(--dark-gray);
     filter: none;
   }
 

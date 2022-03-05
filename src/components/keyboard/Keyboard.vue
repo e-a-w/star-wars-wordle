@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer v-if="show">
     <section class="alpha-keys">
       <div v-for="(row, idx) in alphaRows" :key="idx" class="keyboard-row">
         <div
@@ -51,7 +51,10 @@
       targetWordLength() {
         return this.word.length
       },
-      ...mapState(['currentRow', 'guessedWord', 'word', 'game', 'darkMode'])
+      show() {
+        return !this.cover.open
+      },
+      ...mapState(['currentRow', 'guessedWord', 'word', 'game', 'darkMode', 'cover'])
     },
     methods: {
       keyClass(key) {
@@ -70,7 +73,8 @@
         if (!addLetterPermitted && !removeLetterPermitted) {
           return;
         } else if (enterPermitted) {
-          return this.$store.commit('FINAL_GUESS', this.guessedWord)
+          // return this.$store.commit('FINAL_GUESS', this.guessedWord)
+          this.$store.dispatch('finalGuess', this.guessedWord)
         } else if (key !== 'enter') {
           return this.guessLetter(key)
         } else if (!enterPermitted) {

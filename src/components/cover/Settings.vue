@@ -17,11 +17,19 @@
         </label>
       </div>
 
-      <div v-else class="settings-toggle">
+      <div v-else-if="setting.links" class="settings-toggle">
         <a href="#">Email</a>
         <span class="link-style">|</span>
         <a href="#">Twitter</a>
       </div> 
+
+      <div v-else class="settings-toggle">
+        <select v-model="selectedCategory" @change="openConfirmationModal">
+          <option v-for="category in categories" :key="category">
+            {{category}}
+          </option> 
+        </select>
+      </div>
     </section>
   </div>
 </template>
@@ -33,6 +41,7 @@ export default {
   name: 'Settings',
   data() {
     return {
+      selectedCategory: null,
       initialSettings: [
         {
           key: 'hard',
@@ -53,10 +62,17 @@ export default {
           toggle: true
         },
         {
+          key: 'category',
+          name: 'Select Category',
+          toggle: false,
+          links: false
+        },
+        {
           key: 'feedback',
           name: 'Feedback',
           sub: '',
-          toggle: false
+          toggle: false,
+          links: true
         }
       ]
     }
@@ -80,7 +96,14 @@ export default {
         return setting;
       })
     },
-    ...mapState(['contrastClass', 'hardMode', 'darkMode'])
+    ...mapState([
+      'contrastClass',
+      'hardMode',
+      'darkMode',
+      'category',
+      'categories',
+      'modal'
+    ])
   },
   methods: {
     toggleSetting(key) {
@@ -92,6 +115,18 @@ export default {
         return this.$store.commit('TOGGLE_DARK_MODE')
       }
     },
+    openConfirmationModal() {
+      if(!this.modal.open) {
+        this.$store.commit('TOGGLE_MODAL', {
+          view: 'confirmation',
+          action: 'setCategory',
+          value: this.selectedCategory
+        })
+      }
+    },
+  },
+  created() {
+    this.selectedCategory = this.category;
   }
 }
 </script>

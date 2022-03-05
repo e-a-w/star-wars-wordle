@@ -28,7 +28,7 @@
 <style scoped>
   #toast {
     position: fixed;
-    z-index: 8;
+    z-index: 20;
     top: 20%;
     right: 50%;
     transform: translateX(50%);

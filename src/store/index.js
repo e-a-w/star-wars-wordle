@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import axios from 'axios'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
@@ -33,7 +33,22 @@ export default new Vuex.Store({
       open: false,
       view: null,
     },
-    modalOpen: false,
+    modal: {
+      open: false,
+      view: 'stats',
+      type: null,
+      confirmation: null,
+      value: null
+    },
+    categories: [
+      'people',
+      'planets',
+      'species',
+      'starships',
+      'vehicles',
+    ],
+    randomCategory: false,
+    category: 'people',
     word: '',
     guesses: [],
     guessedWord: '',
@@ -99,8 +114,34 @@ export default new Vuex.Store({
     TOGGLE_COVER(state, payload) {
       return state.cover = payload
     },
-    TOGGLE_MODAL(state, payload) {
-      return state.modalOpen = payload
+    TOGGLE_MODAL(state, payload = {}) {
+      if (!payload.view) {
+        payload.view = 'stats'
+      }
+
+      if (payload.action && payload.confirmation) {
+        this.dispatch(payload.action, payload.value)
+
+        return state.modal = {
+          open: !state.modal.open,
+          view: payload.view,
+          action: null,
+          confirmation: null,
+          value: null
+        }
+      } else {
+        return state.modal = {
+          open: !state.modal.open,
+          view: payload.view,
+          action: payload.action,
+          confirmation: payload.confirmation,
+          value: payload.value
+        }
+      }
+    },
+    SET_CATEGORY(state, category) {
+      this.commit('TOGGLE_TOAST', `Game reset: new category is ${category}`)
+      return state.category = category
     },
     UPDATE_HARD_MODE_GUESS(state, guessedWord) {
       const prevGuess = state.hardModeGuess.currentGuess
@@ -147,7 +188,7 @@ export default new Vuex.Store({
           if (missingLetters.length > 0) {
             // if missing, display error & set invalid
             validGuess = false
-            this.commit('TOGGLE_TOAST', `Must contain ${[...new Set(missingLetters)].join('')}`)
+            this.commit('TOGGLE_TOAST', `Must contain ${[...new Set(missingLetters)].join(', ')}`)
           }
         }
       }
@@ -200,26 +241,6 @@ export default new Vuex.Store({
     NEW_ROW(state) {
       return state.currentRow++
     },
-    FINAL_GUESS(state, guessedWord) {
-      if (guessedWord === state.word) {
-        this.commit('WIN_GAME')
-        this.commit('UPDATE_STATS')
-      } else if (state.currentRow < 5) {
-        if (state.hardMode) {
-          this.commit('UPDATE_HARD_MODE_GUESS', guessedWord)
-          this.commit('VALIDATE_HARD_MODE_GUESS')
-        }
-
-        if (!state.hardMode || (state.hardMode && state.validHardModeGuess)) {
-          this.commit('GUESS_LETTER', { reset: true })
-          this.commit('SET_VALID_GUESS', null)
-          return this.commit('NEW_ROW', state.currentRow + 1)
-        }
-      } else {
-        this.commit('LOSE_GAME')
-        this.commit('UPDATE_STATS')
-      }
-    },
     WIN_GAME(state) {
       this.commit('TOGGLE_TOAST', state.winMessages[state.currentRow])
       return state.game = {won: true, lost: false, over: true}
@@ -256,6 +277,18 @@ export default new Vuex.Store({
       }
 
       return state.guesses = guesses
+    },
+    SET_DEFAULTS(state) {
+      state.guesses = []
+      state.guessedWord = ''
+      state.currentRow = 0
+
+      if (state.hardMode) {
+        state.hardModeGuess = {
+          prevGuess: [],
+          currentGuess: []
+        }
+      }
     }
   },
   actions: {
@@ -266,14 +299,66 @@ export default new Vuex.Store({
       // VEHICLES 1 - 40
       // STARSHIPS 1 - 37
       // TOTAL: 259
-      // const { data } = await axios.get('https://swapi.dev/api/people/2');
-      // remove all whitespace
-      // const word = data?.name?.toLowerCase().trim()
-      const word = 'c3-p0'
+      try {
+        // const { data } = await axios.get(`https://swapi.dev/api/${state.category}/2`);
+        // remove all whitespace
+        // const word = data?.name?.toLowerCase().trim()
+        const word = 'c3-p0'
 
-      commit('SET_WORD', word);
-      commit('SET_GUESSES_ARRAY', word)
-    }
+        commit('SET_WORD', word);
+        commit('SET_GUESSES_ARRAY', word)
+      } catch (error) {
+        commit('TOGGLE_TOAST', 'ERROR')
+      }
+    },
+    async checkWord({ commit, state }) {
+      try {
+        const { data } = await axios.get(`https://swapi.dev/api/${state.category}/?search=${state.guessedWord}`);
+
+        return data?.results.length > 0
+      } catch (error) {
+        commit('SET_VALID_WORD', false)
+      }
+    },
+    async finalGuess({ commit, state }) {
+    // async finalGuess({ commit, dispatch, state }) {
+      if (state.guessedWord === state.word) {
+        commit('WIN_GAME')
+        return commit('UPDATE_STATS')
+      } else {
+        // try {
+        //   const wordExists = await dispatch('checkWord')
+        //   if (!wordExists) return commit('TOGGLE_TOAST', 'Unknown word')
+        // } catch (error) {
+        //   commit('TOGGLE_TOAST', 'ERROR')
+        // }
+
+        if (state.hardMode) {
+          commit('UPDATE_HARD_MODE_GUESS', state.guessedWord)
+          commit('VALIDATE_HARD_MODE_GUESS')
+        }
+
+        if (!state.hardMode || (state.hardMode && state.validHardModeGuess)) {
+          commit('GUESS_LETTER', { reset: true })
+          commit('SET_VALID_HARD_MODE_GUESS', null)
+        }
+      }
+
+      if (state.currentRow === 6) {
+        commit('LOSE_GAME')
+        commit('UPDATE_STATS')
+      } else {
+        commit('NEW_ROW', state.currentRow + 1)
+      }
+    },
+    setCategory({ dispatch, commit }, category) {
+      commit('SET_CATEGORY', category)
+      dispatch('resetGame')
+    },
+    resetGame({ dispatch, commit }) {
+      commit('SET_DEFAULTS')
+      dispatch('fetchWord')
+  }
   },
   modules: {
   }

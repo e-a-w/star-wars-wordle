@@ -21,21 +21,18 @@
     methods: {
       openCover(view) {
         const payload = {
-          open: !this.cover.open,
-          view: view
+          view,
+          open: !this.cover.open
         }
         return this.$store.commit('TOGGLE_COVER', payload)
       },
       openModal() {
-        return this.$store.commit('TOGGLE_MODAL', !this.modalOpen)
+        return this.$store.commit('TOGGLE_MODAL')
       }
     },
     computed: {
       cover() {
         return this.$store.state.cover
-      },
-      modalOpen() {
-        return this.$store.state.modalOpen
       }
     }
   }
