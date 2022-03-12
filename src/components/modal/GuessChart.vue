@@ -11,7 +11,7 @@
           :class="[
             'chart-bar',
             darkMode && 'dark',
-            val.highest && 'highest'
+            val.current && 'current'
           ]"
           :style="{width: `${val.guessPercent}%`}"
         >
@@ -28,6 +28,9 @@
   export default {
     name: 'GuessChart',
     computed: {
+      currentGuessCount() {
+        return this.gameOver ? this.guessCount : 0
+      },
       guessDistribution() {
         const dist = []
         const stats = this.stats.guessDistribution
@@ -35,24 +38,16 @@
         for (let guessNum in stats) {
           dist.push({
             timesGuessed: stats[guessNum],
-            guessPercent: Math.round((stats[guessNum] / this.wonGames) * 100)
+            guessPercent: Math.round((stats[guessNum] / this.wonGames) * 100),
+            current: Number(guessNum) === this.currentGuessCount
           })
         }
 
-        const highest = Math.max(...dist.map(stat => stat.guessPercent))
-        let found = false;
-
-        dist.reverse().forEach(stat => {
-          if(stat.guessPercent === highest & !found) {
-            found = true
-            return stat.highest = true
-          }
-        })
-
-        return dist.reverse()
+        return dist
       },
       ...mapState('styleConfig', ['darkMode']),
       ...mapState('statistics', ['stats']),
+      ...mapGetters('gameState', ['guessCount', 'gameOver']),
       ...mapGetters('statistics', ['wonGames'])
     }
   }
@@ -98,11 +93,11 @@
     background: var(--darker-gray);
   }
 
-  .chart-bar.highest:last-child {
+  .chart-bar.current:last-child {
     background: var(--green);
   }
 
-  .chart-bar.highest.contrast {
+  .chart-bar.current.contrast {
     background: var(--orange);
   }
 </style>

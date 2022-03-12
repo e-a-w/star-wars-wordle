@@ -100,17 +100,19 @@ export default {
         return setting;
       })
     },
-    ...mapState([ 'category', 'categories']),
+    ...mapState('categories', [ 'category', 'categories']),
     ...mapState('modal', ['modalConfig']),
     ...mapState('cover', ['coverConfig']),
     ...mapState('styleConfig', ['contrastClass', 'darkMode']),
     ...mapState('hardMode', ['hardMode']),
-    ...mapGetters('statistics', ['guessCount'])
+    ...mapGetters('gameState', ['guessCount'])
   },
   methods: {
     handleChange() {
+      if (this.selectedCategory === this.category) return;
+
       if(this.guessCount === 1) {
-        return this.$store.dispatch('setCategory', this.selectedCategory)
+        return this.$store.dispatch('categories/setCategory', this.selectedCategory)
        }
       else {
        return this.openConfirmationModal()
@@ -129,7 +131,7 @@ export default {
       if(!this.modalConfig.open) {
         this.$store.commit('modal/TOGGLE_MODAL', {
           view: 'confirmation',
-          action: 'setCategory',
+          action: 'categories/setCategory',
           value: this.selectedCategory
         })
       }
@@ -225,6 +227,8 @@ export default {
   .category-select {
     padding: 5px 7px;
     color: var(--darker-gray);
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 18px;
     border: 1px solid var(--darker-gray);
     border-radius: 3px;
     cursor: pointer;

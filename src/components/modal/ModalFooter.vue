@@ -16,6 +16,8 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
     name: 'ModalFooter',
     data() {
@@ -25,8 +27,9 @@
     },
     computed: {
       gameOver() {
-        return this.$store.state.game.over
-      }
+        return this.game.over
+      },
+      ...mapState('gameState', ['game'])
     },
     methods: {
       startTimer() {
@@ -71,7 +74,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    padding: 15px 0 10px;
   }
 
   #next-game {

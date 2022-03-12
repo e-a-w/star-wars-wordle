@@ -29,7 +29,7 @@
       ...mapState('styleConfig', ['darkMode'])
     },
     created() {
-      this.$store.dispatch('fetchWord')
+      this.$store.dispatch('targetWord/fetchWord')
     }
   }
 </script>

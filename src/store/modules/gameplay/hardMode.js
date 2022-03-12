@@ -13,7 +13,7 @@ export default {
       return state.hardModeOn = !state.hardModeOn
     },
     UPDATE_HARD_MODE_GUESS(state, guessedWord) {
-      const word = this.state.word
+      const word = this.state.targetWord.word
       const prevGuess = state.hardModeGuess.currentGuess
       const currentGuess = guessedWord.split('').map((letter, idx) => {
         return {
@@ -26,7 +26,7 @@ export default {
       return state.hardModeGuess = { prevGuess, currentGuess }
     },
     VALIDATE_HARD_MODE_GUESS(state) {
-      const word = this.state.word
+      const word = this.state.targetWord.word
       const guessedWord = this.state.guessedWord
       let validGuess = true
 

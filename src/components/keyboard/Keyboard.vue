@@ -54,7 +54,9 @@
       show() {
         return !this.coverConfig.open
       },
-      ...mapState(['currentRow', 'guessedWord', 'word', 'game']),
+      ...mapState('guesses', ['guessedWord']),
+      ...mapState('gameState', ['currentRow', 'game']),
+      ...mapState('targetWord', ['word']),
       ...mapState('cover', ['coverConfig']),
       ...mapState('styleConfig', ['darkMode'])
     },
@@ -76,7 +78,7 @@
           return;
         } else if (enterPermitted) {
           // return this.$store.commit('FINAL_GUESS', this.guessedWord)
-          this.$store.dispatch('finalGuess', this.guessedWord)
+          this.$store.dispatch('guesses/finalGuess', this.guessedWord)
         } else if (key !== 'enter') {
           return this.guessLetter(key)
         } else if (!enterPermitted) {
@@ -85,7 +87,7 @@
       },
       guessLetter(key) {
         const payload = { letter: key, add: key !== 'back' }
-        return this.$store.commit('GUESS_LETTER', payload)
+        return this.$store.commit('guesses/GUESS_LETTER', payload)
       },
     }
   }
