@@ -24,7 +24,8 @@
   export default {
     name: 'Game',
     computed: {
-      ...mapState(['guesses', 'word', 'currentRow', 'game', 'contrastClass', 'darkMode'])
+      ...mapState(['guesses', 'word', 'currentRow', 'game']),
+      ...mapState('styleConfig', ['contrastClass', 'darkMode'])
     },
     methods: {
       letterType(idx) {

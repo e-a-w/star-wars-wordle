@@ -48,20 +48,17 @@
 </template>
 
 <script>
-export default {
-  name: 'HowTo',
-  computed: {
-    show() {
-      return this.$store.state.cover.view === 'howTo'
-    },
-    contrastClass() {
-      return this.$store.state.contrastClass
-    },
-    darkMode() {
-      return this.$store.state.darkMode
+  import { mapState } from 'vuex'
+  export default {
+    name: 'HowTo',
+    computed: {
+      show() {
+        return this.coverConfig.view === 'howTo'
+      },
+      ...mapState('styleConfig', ['contrastClass', 'darkMode']),
+      ...mapState('cover', ['coverConfig'])
     }
   }
-}
 </script>
 
 <style scoped>

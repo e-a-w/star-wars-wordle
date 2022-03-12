@@ -19,7 +19,7 @@
   export default {
     name: 'Confirmation',
     computed: {
-      ...mapState(['darkMode', 'contrastClass']),
+      ...mapState('styleConfig', ['darkMode', 'contrastClass']),
       ...mapState('modal', ['modalConfig'])
     },
     methods: {

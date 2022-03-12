@@ -1,5 +1,5 @@
 <template>
-  <aside v-if="cover.open" id="cover" :class="darkMode && 'dark'">
+  <aside v-if="coverConfig.open" id="cover" :class="darkMode && 'dark'">
     <div @click="closeCover" class="close-icon">
       <font-awesome-icon :icon="['far', 'window-close']"></font-awesome-icon>
     </div>
@@ -12,22 +12,19 @@
 <script>
   import Settings from './Settings.vue'
   import HowTo from './HowTo.vue'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'Cover',
     components: { HowTo, Settings },
     methods: {
       closeCover() {
-        return this.$store.commit('TOGGLE_COVER', !this.cover.open)
+        return this.$store.commit('cover/TOGGLE_COVER', !this.coverConfig.open)
       }
     },
     computed: {
-      cover() {
-        return this.$store.state.cover
-      },
-      darkMode() {
-        return this.$store.state.darkMode
-      }
+      ...mapState('styleConfig', ['darkMode']),
+      ...mapState('cover', ['coverConfig'])
     }
   }
 </script>

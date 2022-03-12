@@ -1,24 +1,22 @@
 <template>
-  <div v-if="toast.show" id="toast" :class="darkMode && 'dark'">
-    {{toast.message}}
+  <div v-if="toastConfig.show" id="toast" :class="darkMode && 'dark'">
+    {{toastConfig.message}}
   </div>
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
     name: 'Toast',
     computed: {
-      darkMode() {
-        return this.$store.state.darkMode
-      },
-      toast() {
-        return this.$store.state.toast
-      }
+      ...mapState('styleConfig', ['darkMode']),
+      ...mapState('toast', ['toastConfig'])
     },
     watch: {
       toast(val) {
         if (val.show) {
-          setTimeout(() => this.$store.commit('TOGGLE_TOAST'), 3000)
+          setTimeout(() => this.$store.commit('toast/TOGGLE_TOAST'), 3000)
         }
       }
     }

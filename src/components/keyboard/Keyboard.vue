@@ -52,9 +52,11 @@
         return this.word.length
       },
       show() {
-        return !this.cover.open
+        return !this.coverConfig.open
       },
-      ...mapState(['currentRow', 'guessedWord', 'word', 'game', 'darkMode', 'cover'])
+      ...mapState(['currentRow', 'guessedWord', 'word', 'game']),
+      ...mapState('cover', ['coverConfig']),
+      ...mapState('styleConfig', ['darkMode'])
     },
     methods: {
       keyClass(key) {
@@ -78,7 +80,7 @@
         } else if (key !== 'enter') {
           return this.guessLetter(key)
         } else if (!enterPermitted) {
-          return this.$store.commit('TOGGLE_TOAST', 'Not enough letters')
+          return this.$store.commit('toast/TOGGLE_TOAST', 'Not enough letters')
         }
       },
       guessLetter(key) {

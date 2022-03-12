@@ -83,7 +83,7 @@ export default {
   },
   computed: {
     show() {
-      return this.$store.state.cover.view === 'settings'
+      return this.coverConfig.view === 'settings'
     },
     settings() {
       return this.initialSettings.map(setting => {
@@ -101,13 +101,13 @@ export default {
       })
     },
     ...mapState([
-      'contrastClass',
       'hardMode',
-      'darkMode',
       'category',
       'categories',
     ]),
     ...mapState('modal', ['modalConfig']),
+    ...mapState('cover', ['coverConfig']),
+    ...mapState('styleConfig', ['contrastClass', 'darkMode']),
     ...mapGetters(['guessCount'])
   },
   methods: {
@@ -123,9 +123,9 @@ export default {
       if (key === 'hard') {
         return this.$store.commit('TOGGLE_HARD_MODE')
       } else if (key === 'contrast') {
-       return this.$store.commit('TOGGLE_CONTRAST')
+       return this.$store.commit('styleConfig/TOGGLE_CONTRAST')
       } else if (key === 'dark') {
-        return this.$store.commit('TOGGLE_DARK_MODE')
+        return this.$store.commit('styleConfig/TOGGLE_DARK_MODE')
       }
     },
     openConfirmationModal() {

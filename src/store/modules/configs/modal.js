@@ -1,4 +1,4 @@
-export const modal = {
+export default {
   namespaced: true,
   state: {
     modalConfig: {

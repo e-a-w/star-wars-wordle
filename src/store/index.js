@@ -1,7 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
-import { modal } from './modules/modal'
+import modal from './modules/configs/modal'
+import cover from './modules/configs/cover'
+import toast from './modules/configs/toast'
+import styleConfig from './modules/configs/styleConfig'
 
 Vue.use(Vuex)
 
@@ -30,10 +33,6 @@ export default new Vuex.Store({
         6: 66
       }
     },
-    cover: {
-      open: false,
-      view: null,
-    },
     categories: [
       'people',
       'planets',
@@ -52,13 +51,7 @@ export default new Vuex.Store({
       currentGuess: []
     },
     validHardModeGuess: null,
-    currentRow: 0,
-    contrastClass: 'normal',
-    darkMode: false,
-    toast: {
-      message: '',
-      show: false
-    }
+    currentRow: 0
   },
   getters: {
     guessCount(state) {
@@ -88,28 +81,11 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    TOGGLE_TOAST(state, message = '') {
-      const toast = {
-        show: !state.toast.show,
-        message
-      }
-
-      return state.toast = toast
-    },
-    TOGGLE_CONTRAST(state) {
-      return state.contrastClass = state.contrastClass === 'contrast' ? 'normal' : 'contrast'
-    },
     TOGGLE_HARD_MODE(state) {
       return state.hardMode = !state.hardMode
     },
-    TOGGLE_DARK_MODE(state) {
-      return state.darkMode = !state.darkMode
-    },
-    TOGGLE_COVER(state, payload) {
-      return state.cover = payload
-    },
     SET_CATEGORY(state, category) {
-      this.commit('TOGGLE_TOAST', `Game reset: new category is ${category}`)
+      this.commit('toast/TOGGLE_TOAST', `Game reset: new category is ${category}`)
       return state.category = category
     },
     UPDATE_HARD_MODE_GUESS(state, guessedWord) {
@@ -146,7 +122,7 @@ export default new Vuex.Store({
         if (firstWrongPosition.letter) {
           // if order is incorrect, then display error & set invalid
           validGuess = false
-          this.commit('TOGGLE_TOAST', `${firstWrongPosition.letter} must be in slot ${firstWrongPosition.idx}`)
+          this.commit('toast/TOGGLE_TOAST', `${firstWrongPosition.letter} must be in slot ${firstWrongPosition.idx}`)
         } else {
           // if order is correct, then check if any letters are missing
           const requiredLetters = prevGuess.filter(l => l.required).map(l => l.letter)
@@ -157,7 +133,7 @@ export default new Vuex.Store({
           if (missingLetters.length > 0) {
             // if missing, display error & set invalid
             validGuess = false
-            this.commit('TOGGLE_TOAST', `Must contain ${[...new Set(missingLetters)].join(', ')}`)
+            this.commit('toast/TOGGLE_TOAST', `Must contain ${[...new Set(missingLetters)].join(', ')}`)
           }
         }
       }
@@ -211,11 +187,11 @@ export default new Vuex.Store({
       return state.currentRow++
     },
     WIN_GAME(state) {
-      this.commit('TOGGLE_TOAST', state.winMessages[state.currentRow])
+      this.commit('toast/TOGGLE_TOAST', state.winMessages[state.currentRow])
       return state.game = {won: true, lost: false, over: true}
     },
     LOSE_GAME(state) {
-      this.commit('TOGGLE_TOAST', state.word.toUpperCase())
+      this.commit('toast/TOGGLE_TOAST', state.word.toUpperCase())
       return state.game = {won: false, lost: true, over: true}
     },
     UPDATE_STATS(state) {
@@ -277,7 +253,7 @@ export default new Vuex.Store({
         commit('SET_WORD', word);
         commit('SET_GUESSES_ARRAY', word)
       } catch (error) {
-        commit('TOGGLE_TOAST', 'ERROR')
+        commit('toast/TOGGLE_TOAST', 'ERROR')
       }
     },
     async checkWord({ commit, state }) {
@@ -297,9 +273,9 @@ export default new Vuex.Store({
       } else {
         // try {
         //   const wordExists = await dispatch('checkWord')
-        //   if (!wordExists) return commit('TOGGLE_TOAST', 'Unknown word')
+        //   if (!wordExists) return commit('toast/TOGGLE_TOAST', 'Unknown word')
         // } catch (error) {
-        //   commit('TOGGLE_TOAST', 'ERROR')
+        //   commit('toast/TOGGLE_TOAST', 'ERROR')
         // }
 
         if (state.hardMode) {
@@ -330,6 +306,9 @@ export default new Vuex.Store({
   }
   },
   modules: {
-    modal
+    modal,
+    cover,
+    toast,
+    styleConfig
   }
 })

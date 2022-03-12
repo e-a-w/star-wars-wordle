@@ -16,24 +16,24 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
     name: 'Nav',
     methods: {
       openCover(view) {
         const payload = {
           view,
-          open: !this.cover.open
+          open: !this.coverConfig.open
         }
-        return this.$store.commit('TOGGLE_COVER', payload)
+        return this.$store.commit('cover/TOGGLE_COVER', payload)
       },
       openModal() {
         return this.$store.commit('modal/TOGGLE_MODAL')
       }
     },
     computed: {
-      cover() {
-        return this.$store.state.cover
-      }
+      ...mapState('cover', ['coverConfig'])
     }
   }
 </script>

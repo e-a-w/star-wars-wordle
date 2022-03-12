@@ -13,7 +13,7 @@
       }
     },
     computed: {
-      ...mapState(['darkMode']),
+      ...mapState('styleConfig', ['darkMode']),
       ...mapState('modal', ['modalConfig'])
     },
   }

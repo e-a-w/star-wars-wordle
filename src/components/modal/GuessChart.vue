@@ -23,7 +23,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
 
   export default {
     name: 'GuessChart',
@@ -51,9 +51,7 @@
 
         return dist.reverse()
       },
-      darkMode() {
-        return this.$store.state.darkMode
-      },
+      ...mapState('styleConfig', ['darkMode']),
       ...mapGetters(['wonGames'])
     }
   }

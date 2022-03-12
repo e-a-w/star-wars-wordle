@@ -18,6 +18,7 @@
   import Modal from './components/modal/Modal.vue'
   import ModalBackdrop from './components/modal/ModalBackdrop.vue'
   import Toast from './components/toast/Toast.vue'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'App',
@@ -25,9 +26,7 @@
       Nav, Game, Keyboard, Cover, Modal, ModalBackdrop, Toast
     },
     computed: {
-      darkMode() {
-        return this.$store.state.darkMode
-      }
+      ...mapState('styleConfig', ['darkMode'])
     },
     created() {
       this.$store.dispatch('fetchWord')
