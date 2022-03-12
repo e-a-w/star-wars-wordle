@@ -27,7 +27,7 @@
         return this.$store.commit('TOGGLE_COVER', payload)
       },
       openModal() {
-        return this.$store.commit('TOGGLE_MODAL')
+        return this.$store.commit('modal/TOGGLE_MODAL')
       }
     },
     computed: {

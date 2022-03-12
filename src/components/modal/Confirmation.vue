@@ -19,16 +19,17 @@
   export default {
     name: 'Confirmation',
     computed: {
-      ...mapState(['modal', 'darkMode', 'contrastClass'])
+      ...mapState(['darkMode', 'contrastClass']),
+      ...mapState('modal', ['modalConfig'])
     },
     methods: {
       closeModal() {
-        this.$store.commit('TOGGLE_MODAL')
+        this.$store.commit('modal/TOGGLE_MODAL')
       },
       confirm() {
-        this.$store.commit('TOGGLE_MODAL', {
-          action: this.modal.action,
-          value: this.modal.value,
+        this.$store.commit('modal/TOGGLE_MODAL', {
+          action: this.modalConfig.action,
+          value: this.modalConfig.value,
           confirmation: true
         })
       }

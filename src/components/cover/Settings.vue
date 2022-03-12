@@ -106,8 +106,8 @@ export default {
       'darkMode',
       'category',
       'categories',
-      'modal',
     ]),
+    ...mapState('modal', ['modalConfig']),
     ...mapGetters(['guessCount'])
   },
   methods: {
@@ -129,8 +129,8 @@ export default {
       }
     },
     openConfirmationModal() {
-      if(!this.modal.open) {
-        this.$store.commit('TOGGLE_MODAL', {
+      if(!this.modalConfig.open) {
+        this.$store.commit('modal/TOGGLE_MODAL', {
           view: 'confirmation',
           action: 'setCategory',
           value: this.selectedCategory

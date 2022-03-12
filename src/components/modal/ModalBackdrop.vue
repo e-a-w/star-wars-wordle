@@ -1,5 +1,5 @@
 <template>
-    <div v-if="modal.open" @click="closeModal" id="modal-backdrop" :class="darkMode && 'dark'"></div>
+    <div v-if="modalConfig.open" @click="closeModal" id="modal-backdrop" :class="darkMode && 'dark'"></div>
 </template>
 
 <script>
@@ -9,11 +9,12 @@
     name: 'ModalBackdrop',
     methods: {
       closeModal() {
-        this.$store.commit('TOGGLE_MODAL')
+        this.$store.commit('modal/TOGGLE_MODAL')
       }
     },
     computed: {
-      ...mapState(['modal', 'darkMode'])
+      ...mapState(['darkMode']),
+      ...mapState('modal', ['modalConfig'])
     },
   }
 </script>

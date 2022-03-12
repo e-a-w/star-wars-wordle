@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import { modal } from './modules/modal'
 
 Vue.use(Vuex)
 
@@ -32,13 +33,6 @@ export default new Vuex.Store({
     cover: {
       open: false,
       view: null,
-    },
-    modal: {
-      open: false,
-      view: 'stats',
-      type: null,
-      confirmation: null,
-      value: null
     },
     categories: [
       'people',
@@ -113,31 +107,6 @@ export default new Vuex.Store({
     },
     TOGGLE_COVER(state, payload) {
       return state.cover = payload
-    },
-    TOGGLE_MODAL(state, payload = {}) {
-      if (!payload.view) {
-        payload.view = 'stats'
-      }
-
-      if (payload.action && payload.confirmation) {
-        this.dispatch(payload.action, payload.value)
-
-        return state.modal = {
-          open: !state.modal.open,
-          view: payload.view,
-          action: null,
-          confirmation: null,
-          value: null
-        }
-      } else {
-        return state.modal = {
-          open: !state.modal.open,
-          view: payload.view,
-          action: payload.action,
-          confirmation: payload.confirmation,
-          value: payload.value
-        }
-      }
     },
     SET_CATEGORY(state, category) {
       this.commit('TOGGLE_TOAST', `Game reset: new category is ${category}`)
@@ -361,5 +330,6 @@ export default new Vuex.Store({
   }
   },
   modules: {
+    modal
   }
 })

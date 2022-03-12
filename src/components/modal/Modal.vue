@@ -1,20 +1,20 @@
 <template>
   <aside
     id="modal"
-    v-if="modal.open"
-    :class="[darkMode && 'dark', modal.view]"
+    v-if="modalConfig.open"
+    :class="[darkMode && 'dark', modalConfig.view]"
   >
     <div @click="closeModal" class="close-icon">
       <font-awesome-icon :icon="['far', 'window-close']"></font-awesome-icon>
     </div>
 
-    <div v-if="modal.view === 'stats'">
+    <div v-if="modalConfig.view === 'stats'">
       <Statistics />
       <GuessChart />
       <ModalFooter />
     </div>
 
-    <Confirmation v-if="modal.view === 'confirmation'" />
+    <Confirmation v-if="modalConfig.view === 'confirmation'" />
   </aside>
 </template>
 
@@ -35,11 +35,12 @@
     },
     methods: {
       closeModal() {
-        this.$store.commit('TOGGLE_MODAL')
+        this.$store.commit('modal/TOGGLE_MODAL')
       }
     },
     computed: {
-      ...mapState(['modal', 'darkMode'])
+      ...mapState(['darkMode']),
+      ...mapState('modal', ['modalConfig'])
     }
   }
 </script>
