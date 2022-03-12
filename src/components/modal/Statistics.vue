@@ -29,7 +29,7 @@
           {name: 'Max Streak', num: this.maxStreak}
         ]
       },
-      ...mapGetters(['totalGames','maxStreak', 'currentStreak', 'winPercent'])
+      ...mapGetters('statistics', ['totalGames','maxStreak', 'currentStreak', 'winPercent'])
     }
   }
 </script>
@@ -48,7 +48,9 @@
   .stat {
     display: flex;
     flex-direction: column;
+    align-items: center;
     width: 50px;
+    padding: 5px 10px 10px;
   }
 
   .stat-num {

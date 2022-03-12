@@ -8,13 +8,13 @@
       <font-awesome-icon :icon="['far', 'window-close']"></font-awesome-icon>
     </div>
 
-    <div v-if="modalConfig.view === 'stats'">
+    <div class="modal-content" v-if="modalConfig.view === 'stats'">
       <Statistics />
       <GuessChart />
       <ModalFooter />
     </div>
 
-    <Confirmation v-if="modalConfig.view === 'confirmation'" />
+    <Confirmation class="modal-content" v-if="modalConfig.view === 'confirmation'" />
   </aside>
 </template>
 
@@ -53,15 +53,18 @@
     width: 95vw;
     max-width: 500px;
     padding: 30px 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
     gap: 30px;
     text-align: center;
     background: white;
     border-radius: 5px;
     filter: drop-shadow(2px 2px 10px var(--light-gray));
+  }
+
+  .modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
   }
 
   #modal.stats {

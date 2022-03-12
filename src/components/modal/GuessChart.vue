@@ -30,7 +30,7 @@
     computed: {
       guessDistribution() {
         const dist = []
-        const stats = this.$store.state.stats.guessDistribution
+        const stats = this.stats.guessDistribution
 
         for (let guessNum in stats) {
           dist.push({
@@ -52,7 +52,8 @@
         return dist.reverse()
       },
       ...mapState('styleConfig', ['darkMode']),
-      ...mapGetters(['wonGames'])
+      ...mapState('statistics', ['stats']),
+      ...mapGetters('statistics', ['wonGames'])
     }
   }
 </script>

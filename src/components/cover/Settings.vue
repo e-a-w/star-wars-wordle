@@ -100,15 +100,12 @@ export default {
         return setting;
       })
     },
-    ...mapState([
-      'hardMode',
-      'category',
-      'categories',
-    ]),
+    ...mapState([ 'category', 'categories']),
     ...mapState('modal', ['modalConfig']),
     ...mapState('cover', ['coverConfig']),
     ...mapState('styleConfig', ['contrastClass', 'darkMode']),
-    ...mapGetters(['guessCount'])
+    ...mapState('hardMode', ['hardMode']),
+    ...mapGetters('statistics', ['guessCount'])
   },
   methods: {
     handleChange() {
@@ -121,7 +118,7 @@ export default {
     },
     toggleSetting(key) {
       if (key === 'hard') {
-        return this.$store.commit('TOGGLE_HARD_MODE')
+        return this.$store.commit('hardMode/TOGGLE_HARD_MODE')
       } else if (key === 'contrast') {
        return this.$store.commit('styleConfig/TOGGLE_CONTRAST')
       } else if (key === 'dark') {

@@ -14,7 +14,7 @@
       ...mapState('toast', ['toastConfig'])
     },
     watch: {
-      toast(val) {
+      toastConfig(val) {
         if (val.show) {
           setTimeout(() => this.$store.commit('toast/TOGGLE_TOAST'), 3000)
         }
