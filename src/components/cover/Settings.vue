@@ -24,7 +24,11 @@
       </div> 
 
       <div v-else class="settings-toggle">
-        <select v-model="selectedCategory" @change="openConfirmationModal">
+        <select
+          :class="['category-select', darkMode && 'dark']"
+          v-model="selectedCategory"
+          @change="handleChange"
+        >
           <option v-for="category in categories" :key="category">
             {{category}}
           </option> 
@@ -35,7 +39,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Settings',
@@ -102,10 +106,19 @@ export default {
       'darkMode',
       'category',
       'categories',
-      'modal'
-    ])
+      'modal',
+    ]),
+    ...mapGetters(['guessCount'])
   },
   methods: {
+    handleChange() {
+      if(this.guessCount === 1) {
+        return this.$store.dispatch('setCategory', this.selectedCategory)
+       }
+      else {
+       return this.openConfirmationModal()
+      }
+    },
     toggleSetting(key) {
       if (key === 'hard') {
         return this.$store.commit('TOGGLE_HARD_MODE')
@@ -176,13 +189,14 @@ export default {
     display: inline-flex;
     background: var(--dark-gray);
     border-radius: 5px;
+    cursor: pointer;
   }
 
   .toggle.dark {
     background: var(--darker-gray);
   }
 
-  .toggle input {
+  .toggle input[type="checkbox"] {
     opacity: 0;
     width: 0;
     height: 0;
@@ -209,5 +223,19 @@ export default {
 
   input:checked + .slider.contrast {
     background: var(--orange);
+  }
+
+  .category-select {
+    padding: 5px 7px;
+    color: var(--darker-gray);
+    border: 1px solid var(--darker-gray);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .category-select.dark {
+    background: var(--light-gray);
+    color: black;
+    border-color: transparent;
   }
 </style>
