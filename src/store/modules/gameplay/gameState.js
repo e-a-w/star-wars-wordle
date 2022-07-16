@@ -4,7 +4,8 @@ export default {
     game: {
       won: null,
       lost: null,
-      over: false
+      over: false,
+      loading: true
     },
     winMessages: [
       'Genius', 'Magnificent',
@@ -22,6 +23,9 @@ export default {
     },
     gameOver(state) {
       return state.game.over
+    },
+    gameLoading(state) {
+      return state.game.loading
     }
   },
   mutations: {
@@ -47,13 +51,21 @@ export default {
           currentGuess: []
         }
       }
+    },
+    TOGGLE_LOADING(state, loading = null) {
+      if (loading === null) {
+        return state.game.loading = !state.game.loading
+      } else {
+        return state.game.loading = loading
+      }
+      
     }
   },
   actions: {
-    resetGame({ commit, dispatch, state }) {
+    resetGame({ commit, state }) {
       commit('SET_DEFAULTS')
-      dispatch('targetWord/fetchWord', '', { root: true })
-      return state.game = {won: null, lost: null, over: false}
+      this.dispatch('targetWord/fetchWord')
+      state.game = { won: null, lost: null, over: false }
     }
   }
 }

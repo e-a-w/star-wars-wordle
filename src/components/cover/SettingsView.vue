@@ -29,7 +29,7 @@
           v-model="selectedCategory"
           @change="handleChange"
         >
-          <option v-for="category in categories" :key="category">
+          <option v-for="category in categoryNames" :key="category">
             {{category}}
           </option> 
         </select>
@@ -100,19 +100,24 @@ export default {
         return setting;
       })
     },
-    ...mapState('categories', [ 'category', 'categories']),
+    ...mapState('categories', [ 'category']),
     ...mapState('modal', ['modalConfig']),
     ...mapState('cover', ['coverConfig']),
     ...mapState('styleConfig', ['contrastClass', 'darkMode']),
     ...mapState('hardMode', ['hardMode']),
-    ...mapGetters('gameState', ['guessCount', 'gameOver'])
+    ...mapGetters('gameState', ['guessCount', 'gameOver']),
+    ...mapGetters('categories', ['categoryNames'])
   },
   methods: {
+    closeCover() {
+      return this.$store.commit('cover/TOGGLE_COVER', true)
+    },
     handleChange() {
       if (this.selectedCategory === this.category) return;
 
       if(this.guessCount === 1 || this.gameOver) {
-        return this.$store.dispatch('categories/setCategory', this.selectedCategory)
+        this.$store.dispatch('categories/setCategory', this.selectedCategory)
+        return this.closeCover()
        }
       else {
        return this.openConfirmationModal()

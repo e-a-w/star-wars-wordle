@@ -1,33 +1,46 @@
 <template>
   <main>
-    <section v-for="(row, rowIdx) in guesses" :key="rowIdx" class="row">
-      <div
-        v-for="(letter, idx) in row"
-        :class="[
-          'letter',
-          letterColor(letter, idx, rowIdx),
-          letterType(idx),
-          contrastClass,
-          darkMode && 'dark'
-        ]"
-        :key="idx"
-      >
-        {{letter}}
+    <section v-if="gameLoading || !word.length">
+      <p class="loading-text">Preparing game board...</p>
+      <atom-spinner
+        :animation-duration="1000"
+        :size="60"
+        :color="contrastClass === 'contrast' ? 'rgb(235, 162, 27)' : 'rgb(90, 175, 90)'"
+      />
+    </section>
+    <section class="game-section" v-else>
+      <div v-for="(row, rowIdx) in guesses" :key="rowIdx" class="row">
+        <div
+          v-for="(letter, idx) in row"
+          :class="[
+            'letter',
+            letterColor(letter, idx, rowIdx),
+            letterType(idx),
+            contrastClass,
+            darkMode && 'dark'
+          ]"
+          :key="idx"
+        >
+          {{letter}}
+        </div>
       </div>
-     </section>
+    </section>
   </main>
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
+  import { AtomSpinner } from 'epic-spinners'  
 
-  export default {
+    export default {
     name: 'GameBoard',
+    components: { AtomSpinner },
     computed: {
       ...mapState('guesses', ['guesses']),
-      ...mapState('gameState', ['currentRow', 'game']),
+      ...mapState('gameState', ['currentRow', 'game', 'loading']),
       ...mapState('targetWord', ['word']),
-      ...mapState('styleConfig', ['contrastClass', 'darkMode'])
+      ...mapState('styleConfig', ['contrastClass', 'darkMode']),
+      ...mapGetters('gameState', ['gameLoading'])
     },
     methods: {
       letterType(idx) {
@@ -49,13 +62,26 @@
           return 'wrong-letter'
         }
       }
-    }
+    },
+    created() {
+      setTimeout(() => this.$store.commit('gameState/TOGGLE_LOADING', false), 2000)
+    },
   }
 </script>
 
 <style scoped>
   main {
     position: relative;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .loading-text {
+    margin-bottom: 1rem;
   }
 
   .row {

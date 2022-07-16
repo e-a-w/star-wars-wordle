@@ -5,6 +5,7 @@
     <VCover/>
     <ModalBackdrop/>
     <VModal/>
+    <CategoryTitle/>
     <GameBoard/>
     <KeyBoard/>
   </div>
@@ -18,19 +19,20 @@
   import VModal from './components/modal/VModal.vue'
   import ModalBackdrop from './components/modal/ModalBackdrop.vue'
   import VToast from './components/toast/VToast.vue'
+  import CategoryTitle from './components/game/CategoryTitle.vue'
   import { mapState } from 'vuex'
 
   export default {
     name: 'App',
     components: {
-      NavBar, GameBoard, KeyBoard, VCover, VModal, ModalBackdrop, VToast
+      NavBar, GameBoard, KeyBoard, VCover, VModal, ModalBackdrop, VToast, CategoryTitle
     },
     computed: {
       ...mapState('styleConfig', ['darkMode'])
     },
     created() {
       this.$store.dispatch('targetWord/fetchWord')
-    }
+    },
   }
 </script>
 

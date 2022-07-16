@@ -3,7 +3,7 @@ export default {
   state: {
     guesses: [],
     guessedWord: '',
-    maxGuesses: 3
+    maxGuesses: 6
   },
   mutations: {
     GUESS_LETTER(state, payload) {
@@ -69,8 +69,8 @@ export default {
         return this.dispatch('statistics/updateStats')
       } else {
         // try {
-        //   const wordExists = await dispatch('targetWord/checkWord', '', { root: true })
-        //   if (!wordExists) return commit('toast/TOGGLE_TOAST', 'Unknown word', { root: true })
+        //   const wordExists = await this.dispatch('targetWord/checkWord')
+        //   if (!wordExists) return this.commit('toast/TOGGLE_TOAST', 'Unknown word')
         // } catch (error) {
         //   commit('toast/TOGGLE_TOAST', 'ERROR')
         // }
