@@ -22,7 +22,7 @@
   import { mapState } from 'vuex'
 
   export default {
-    name: 'Game',
+    name: 'GameBoard',
     computed: {
       ...mapState('guesses', ['guesses']),
       ...mapState('gameState', ['currentRow', 'game']),

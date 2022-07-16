@@ -17,7 +17,7 @@
   import { mapState } from 'vuex'
 
   export default {
-    name: 'Confirmation',
+    name: 'ModalConfirm',
     computed: {
       ...mapState('styleConfig', ['darkMode', 'contrastClass']),
       ...mapState('modal', ['modalConfig'])

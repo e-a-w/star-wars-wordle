@@ -20,7 +20,7 @@ export default {
   actions: {
     setCategory({ dispatch, commit }, category) {
       commit('SET_CATEGORY', category)
-      dispatch('gameState/resetGame')
+      dispatch('gameState/resetGame', '', { root: true })
     },
   }
 }

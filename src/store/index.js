@@ -21,9 +21,9 @@ export default new Vuex.Store({
     guesses,
     hardMode,
     modal,
-    toast,
     statistics,
     styleConfig,
     targetWord,
+    toast,
   }
 })

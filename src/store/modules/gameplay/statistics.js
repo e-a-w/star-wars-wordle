@@ -2,16 +2,16 @@ export default {
   namespaced: true,
   state: {
     stats: {
-      maxStreak: 2,
-      currentStreak: 2,
-      lostGames: 20,
+      maxStreak: 0,
+      currentStreak: 0,
+      lostGames: 0,
       guessDistribution: {
-        1: 1,
-        2: 2,
-        3: 3,
-        4: 4,
-        5: 5,
-        6: 6
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+        6: 0
       }
     },
   },
@@ -36,7 +36,7 @@ export default {
       return state.stats.maxStreak
     },
     winPercent(state, getters) {
-      return Math.round((getters.wonGames / getters.totalGames) * 100)
+      return getters.totalGames === 0 ? 0 : Math.round((getters.wonGames / getters.totalGames) * 100)
     },
   },
   actions: {

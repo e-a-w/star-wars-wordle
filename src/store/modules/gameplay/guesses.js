@@ -3,7 +3,7 @@ export default {
   state: {
     guesses: [],
     guessedWord: '',
-    maxGuesses: 2
+    maxGuesses: 3
   },
   mutations: {
     GUESS_LETTER(state, payload) {
@@ -60,17 +60,17 @@ export default {
     },
   },
   actions: {
-    async finalGuess({ commit, state, rootState }) {
+    // eslint-disable-next-line
+    async finalGuess({ commit, state, dispatch, rootState }) {
       const mode = rootState.hardMode
 
-    // async finalGuess({ commit, dispatch, state }) {
       if (state.guessedWord === rootState.targetWord.word) {
         this.commit('gameState/WIN_GAME')
         return this.dispatch('statistics/updateStats')
       } else {
         // try {
-        //   const wordExists = await dispatch('checkWord')
-        //   if (!wordExists) return commit('toast/TOGGLE_TOAST', 'Unknown word')
+        //   const wordExists = await dispatch('targetWord/checkWord', '', { root: true })
+        //   if (!wordExists) return commit('toast/TOGGLE_TOAST', 'Unknown word', { root: true })
         // } catch (error) {
         //   commit('toast/TOGGLE_TOAST', 'ERROR')
         // }

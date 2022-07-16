@@ -37,8 +37,8 @@ export default {
       return state.game = {won: false, lost: true, over: true}
     },
     SET_DEFAULTS(state) {
-      this.state.guesses = []
-      this.state.guessedWord = ''
+      this.state.guesses.guesses = []
+      this.state.guesses.guessedWord = ''
       state.currentRow = 0
 
       if (this.state.hardMode.hardModeOn) {
@@ -50,9 +50,10 @@ export default {
     }
   },
   actions: {
-    resetGame({ commit }) {
+    resetGame({ commit, dispatch, state }) {
       commit('SET_DEFAULTS')
-      this.dispatch('targetWord/fetchWord')
+      dispatch('targetWord/fetchWord', '', { root: true })
+      return state.game = {won: null, lost: null, over: false}
     }
   }
 }

@@ -1,29 +1,29 @@
 <template>
   <div id="app" :class="darkMode && 'dark'">
-    <Nav/>
-    <Toast/>
-    <Cover/>
+    <NavBar/>
+    <VToast/>
+    <VCover/>
     <ModalBackdrop/>
-    <Modal/>
-    <Game/>
-    <Keyboard/>
+    <VModal/>
+    <GameBoard/>
+    <KeyBoard/>
   </div>
 </template>
 
 <script>
-  import Nav from './components/nav/Nav.vue'
-  import Game from './components/game/Game.vue'
-  import Keyboard from './components/keyboard/Keyboard.vue'
-  import Cover from './components/cover/Cover.vue'
-  import Modal from './components/modal/Modal.vue'
+  import NavBar from './components/nav/NavBar.vue'
+  import GameBoard from './components/game/GameBoard.vue'
+  import KeyBoard from './components/keyboard/KeyBoard.vue'
+  import VCover from './components/cover/VCover.vue'
+  import VModal from './components/modal/VModal.vue'
   import ModalBackdrop from './components/modal/ModalBackdrop.vue'
-  import Toast from './components/toast/Toast.vue'
+  import VToast from './components/toast/VToast.vue'
   import { mapState } from 'vuex'
 
   export default {
     name: 'App',
     components: {
-      Nav, Game, Keyboard, Cover, Modal, ModalBackdrop, Toast
+      NavBar, GameBoard, KeyBoard, VCover, VModal, ModalBackdrop, VToast
     },
     computed: {
       ...mapState('styleConfig', ['darkMode'])

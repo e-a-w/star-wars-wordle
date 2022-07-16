@@ -42,7 +42,7 @@
 import { mapGetters, mapState } from 'vuex'
 
 export default {
-  name: 'Settings',
+  name: 'SettingsView',
   data() {
     return {
       selectedCategory: null,
@@ -105,13 +105,13 @@ export default {
     ...mapState('cover', ['coverConfig']),
     ...mapState('styleConfig', ['contrastClass', 'darkMode']),
     ...mapState('hardMode', ['hardMode']),
-    ...mapGetters('gameState', ['guessCount'])
+    ...mapGetters('gameState', ['guessCount', 'gameOver'])
   },
   methods: {
     handleChange() {
       if (this.selectedCategory === this.category) return;
 
-      if(this.guessCount === 1) {
+      if(this.guessCount === 1 || this.gameOver) {
         return this.$store.dispatch('categories/setCategory', this.selectedCategory)
        }
       else {

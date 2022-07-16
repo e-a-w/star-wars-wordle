@@ -19,7 +19,7 @@
   import { mapGetters } from 'vuex'
 
   export default {
-    name: 'Statistics',
+    name: 'ModalStatistics',
     computed: {
       stats() {
         return [

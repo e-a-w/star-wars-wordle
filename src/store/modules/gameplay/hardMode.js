@@ -1,7 +1,7 @@
 export default {
   namespaced: true,
   state: {
-    hardModeOn: false,
+    hardModeOn: true,
     hardModeGuess: {
       prevGuess: [],
       currentGuess: []
@@ -27,10 +27,10 @@ export default {
     },
     VALIDATE_HARD_MODE_GUESS(state) {
       const word = this.state.targetWord.word
-      const guessedWord = this.state.guessedWord
+      const guessedWord = this.state.guesses.guessedWord
       let validGuess = true
 
-      if (this.state.currentRow > 0) {
+      if (this.state.gameState.currentRow > 0) {
         const prevGuess = state.hardModeGuess.prevGuess
 
         // check order

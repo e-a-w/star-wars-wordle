@@ -8,7 +8,7 @@
   import { mapState } from 'vuex'
 
   export default {
-    name: 'Toast',
+    name: 'VToast',
     computed: {
       ...mapState('styleConfig', ['darkMode']),
       ...mapState('toast', ['toastConfig'])

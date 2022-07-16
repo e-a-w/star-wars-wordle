@@ -2,8 +2,8 @@
   <section id="guess-dist">
     <h3>Guess Distribution</h3>
 
-    <div id="guess-chart">
-      <div v-for="(val, idx) in guessDistribution" :key="idx" class="chart-row">
+    <div v-if="guessDistribution.length" id="guess-chart">
+      <div  v-for="(val, idx) in guessDistribution" :key="idx" class="chart-row">
         <span class="chart-num">
           {{idx + 1}}
         </span>
@@ -19,6 +19,8 @@
         </span>
       </div>
     </div>
+
+    <div class="no-data-text" v-else>No Data</div>
   </section>
 </template>
 
@@ -36,10 +38,12 @@
         const stats = this.stats.guessDistribution
 
         for (let guessNum in stats) {
+          const current = Number(guessNum) === this.currentGuessCount
+
           dist.push({
             timesGuessed: stats[guessNum],
             guessPercent: Math.round((stats[guessNum] / this.wonGames) * 100),
-            current: Number(guessNum) === this.currentGuessCount
+            current: this.gameWon && current
           })
         }
 
@@ -47,7 +51,7 @@
       },
       ...mapState('styleConfig', ['darkMode']),
       ...mapState('statistics', ['stats']),
-      ...mapGetters('gameState', ['guessCount', 'gameOver']),
+      ...mapGetters('gameState', ['guessCount', 'gameOver', 'gameWon']),
       ...mapGetters('statistics', ['wonGames'])
     }
   }
@@ -99,5 +103,9 @@
 
   .chart-bar.current.contrast {
     background: var(--orange);
+  }
+
+  .no-data-text {
+    text-transform: capitalize;
   }
 </style>

@@ -5,18 +5,18 @@
     </div>
 
     <HowTo />
-    <Settings />
+    <SettingsView />
   </aside>
 </template>
 
 <script>
-  import Settings from './Settings.vue'
+  import SettingsView from './SettingsView.vue'
   import HowTo from './HowTo.vue'
   import { mapState } from 'vuex'
 
   export default {
-    name: 'Cover',
-    components: { HowTo, Settings },
+    name: 'VCover',
+    components: { HowTo, SettingsView },
     methods: {
       closeCover() {
         return this.$store.commit('cover/TOGGLE_COVER', !this.coverConfig.open)

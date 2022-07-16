@@ -19,7 +19,7 @@
   import { mapState } from 'vuex'
 
   export default {
-    name: 'Nav',
+    name: 'NavBar',
     methods: {
       openCover(view) {
         const payload = {

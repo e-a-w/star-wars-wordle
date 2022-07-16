@@ -9,30 +9,30 @@
     </div>
 
     <div class="modal-content" v-if="modalConfig.view === 'stats'">
-      <Statistics />
+      <ModalStatistics />
       <GuessChart />
       <ModalFooter />
     </div>
 
-    <Confirmation class="modal-content" v-if="modalConfig.view === 'confirmation'" />
+    <ModalConfirm class="modal-content" v-if="modalConfig.view === 'confirmation'" />
   </aside>
 </template>
 
 <script>
-  import Statistics from './Statistics.vue'
+  import ModalStatistics from './ModalStatistics.vue'
   import GuessChart from './GuessChart.vue'
   import ModalFooter from './ModalFooter.vue'
-  import Confirmation from './Confirmation.vue'
+  import ModalConfirm from './ModalConfirm.vue'
   import { mapState } from 'vuex'
 
   export default {
-    name: 'Modal',
+    name: 'VModal',
     components: {
-      Statistics,
-      GuessChart,
-      ModalFooter,
-      Confirmation
-    },
+    ModalStatistics,
+    GuessChart,
+    ModalFooter,
+    ModalConfirm
+},
     methods: {
       closeModal() {
         this.$store.commit('modal/TOGGLE_MODAL')

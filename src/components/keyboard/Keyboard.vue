@@ -32,7 +32,7 @@
   import { mapState } from 'vuex'
 
   export default {
-    name: 'Keyboard',
+    name: 'KeyBoard',
     data() {
       return {
         alphaRows: [
@@ -77,7 +77,6 @@
         if (!addLetterPermitted && !removeLetterPermitted) {
           return;
         } else if (enterPermitted) {
-          // return this.$store.commit('FINAL_GUESS', this.guessedWord)
           this.$store.dispatch('guesses/finalGuess', this.guessedWord)
         } else if (key !== 'enter') {
           return this.guessLetter(key)
