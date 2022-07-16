@@ -15,8 +15,6 @@ export default {
         modal.view = 'stats'
       }
 
-      console.log(modal.actions, modal.mutations)
-
       if ((modal.actions || modal.mutations) && modal.confirmation) {
         const actions = modal.actions
         const mutations = modal.mutations

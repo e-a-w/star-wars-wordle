@@ -1,7 +1,8 @@
 <template>
-  <p v-if="!gameLoading">
-    {{ gameCategory }}
-  </p>
+  <section :class="gameOver && 'section-spacing'">
+    <p v-if="!gameLoading"> {{ gameCategory }} </p>
+    <button v-if="gameOver" @click="resetGame">Play Again?</button>
+  </section>
 </template>
 
 <script>
@@ -17,14 +18,48 @@
           return this.category;
         }
       },
-      ...mapGetters('gameState', ['gameLoading']),
+      ...mapGetters('gameState', ['gameLoading', 'gameOver']),
       ...mapState('categories', ['category'])
+    },
+    methods: {
+      resetGame() {
+        this.$store.dispatch('gameState/resetGame')
+      }
     }
   }
 </script>
 
 <style scoped>
+  section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+  }
+
+  .section-spacing {
+    margin: .5rem 0 .75rem;
+  }
+
   p {
-    font-size: .8rem;
+    font-size: 18px;
+  }
+
+  button {
+    padding: .25rem .5rem;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    background: var(--light-gray);
+    color: black;
+    border-color: transparent;
+    border-radius: 5px;
+    filter: drop-shadow(2px 2px 3px black);
+    cursor: pointer;
+    transition: opacity .2s ease-in;
+  }
+
+  button:hover, button:focus, button:active {
+    opacity: .7;
   }
 </style>

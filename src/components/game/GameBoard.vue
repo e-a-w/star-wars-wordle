@@ -100,6 +100,7 @@
     align-items: center;
     font-weight: 700;
     border: 2px solid var(--light-gray);
+    user-select: none;
   }
 
   @media only screen and (min-width: 539px) {
