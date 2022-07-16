@@ -5,7 +5,7 @@
     <VCover/>
     <ModalBackdrop/>
     <VModal/>
-    <CategoryTitle/>
+    <HeaderSection v-if="!gameLoading"/>
     <GameBoard/>
     <KeyBoard/>
   </div>
@@ -19,16 +19,17 @@
   import VModal from './components/modal/VModal.vue'
   import ModalBackdrop from './components/modal/ModalBackdrop.vue'
   import VToast from './components/toast/VToast.vue'
-  import CategoryTitle from './components/game/CategoryTitle.vue'
-  import { mapState } from 'vuex'
+  import HeaderSection from './components/game/HeaderSection.vue'
+  import { mapState, mapGetters } from 'vuex'
 
   export default {
     name: 'App',
     components: {
-      NavBar, GameBoard, KeyBoard, VCover, VModal, ModalBackdrop, VToast, CategoryTitle
+      NavBar, GameBoard, KeyBoard, VCover, VModal, ModalBackdrop, VToast, HeaderSection
     },
     computed: {
-      ...mapState('styleConfig', ['darkMode'])
+      ...mapState('styleConfig', ['darkMode']),
+      ...mapGetters('gameState', ['gameLoading'])
     },
     created() {
       this.$store.dispatch('targetWord/fetchWord')

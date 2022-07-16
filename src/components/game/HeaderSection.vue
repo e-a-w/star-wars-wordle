@@ -1,6 +1,6 @@
 <template>
   <section :class="gameOver && 'section-spacing'">
-    <p v-if="!gameLoading"> {{ gameCategory }} </p>
+    <p> {{ gameCategory }} </p>
     <button v-if="gameOver" @click="resetGame">Play Again?</button>
   </section>
 </template>
@@ -9,7 +9,7 @@
   import { mapGetters, mapState } from 'vuex'
 
   export default {
-    name: 'GameBoard',
+    name: 'HeaderSection',
     computed: {
       gameCategory() {
         if (this.category === 'people') {
@@ -18,7 +18,7 @@
           return this.category;
         }
       },
-      ...mapGetters('gameState', ['gameLoading', 'gameOver']),
+      ...mapGetters('gameState', ['gameOver']),
       ...mapState('categories', ['category'])
     },
     methods: {
@@ -35,11 +35,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: .5rem;
-  }
-
-  .section-spacing {
-    margin: .5rem 0 .75rem;
+    gap: .75rem;
   }
 
   p {

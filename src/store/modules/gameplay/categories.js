@@ -22,6 +22,9 @@ export default {
         name: 'starships',
         max: 37
       },
+      {
+        name: 'random'
+      }
     ],
     randomCategory: false,
     category: 'people',
