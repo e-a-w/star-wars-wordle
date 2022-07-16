@@ -120,6 +120,7 @@
     background: var(--light-gray);
     border-radius: 4px;
     cursor: pointer;
+    user-select: none;
   }
 
 @media only screen and (min-width: 539px) {

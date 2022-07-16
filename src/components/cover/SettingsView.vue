@@ -136,8 +136,18 @@ export default {
       if(!this.modalConfig.open) {
         this.$store.commit('modal/TOGGLE_MODAL', {
           view: 'confirmation',
-          action: 'categories/setCategory',
-          value: this.selectedCategory
+          actions: [
+            {
+              action: 'categories/setCategory',
+              value: this.selectedCategory 
+            }
+          ],
+          mutations: [
+            {
+              mutation: 'cover/TOGGLE_COVER',
+              value: true
+            }
+          ]
         })
       }
     },

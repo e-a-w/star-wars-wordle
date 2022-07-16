@@ -28,8 +28,8 @@
       },
       confirm() {
         this.$store.commit('modal/TOGGLE_MODAL', {
-          action: this.modalConfig.action,
-          value: this.modalConfig.value,
+          actions: this.modalConfig.actions,
+          mutations: this.modalConfig.mutations,
           confirmation: true
         })
       }

@@ -15,23 +15,36 @@ export default {
         modal.view = 'stats'
       }
 
-      if (modal.action && modal.confirmation) {
-        this.dispatch(modal.action, modal.value)
+      console.log(modal.actions, modal.mutations)
+
+      if ((modal.actions || modal.mutations) && modal.confirmation) {
+        const actions = modal.actions
+        const mutations = modal.mutations
+
+        for (const modalAction in actions) {
+          const { action, value } = actions[modalAction]
+          this.dispatch(action, value)
+        }
+
+        for (const modalMutation in mutations) {
+          const { mutation, value } = mutations[modalMutation]
+          this.commit(mutation, value)
+        }
 
         return state.modalConfig = {
           open: !state.modalConfig.open,
           view: modal.view,
-          action: null,
-          confirmation: null,
-          value: null
+          actions: [],
+          mutations: [],
+          confirmation: null
         }
       } else {
         return state.modalConfig = {
           open: !state.modalConfig.open,
           view: modal.view,
-          action: modal.action,
-          confirmation: modal.confirmation,
-          value: modal.value
+          actions: modal.actions,
+          mutations: modal.mutations,
+          confirmation: modal.confirmation
         }
       }
     },
