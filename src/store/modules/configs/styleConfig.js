@@ -2,7 +2,7 @@ export default {
   namespaced: true,
   state: {
     contrastClass: 'normal',
-    darkMode: true,
+    darkMode: false,
   },
   mutations: {
     TOGGLE_CONTRAST(state) {

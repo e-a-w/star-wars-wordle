@@ -18,9 +18,13 @@
       </div>
 
       <div v-else-if="setting.links" class="settings-toggle">
-        <a href="#">Email</a>
+        <a href="https://github.com/e-a-w/star-wars-wordle" target="_blank" rel="noopener noreferrer">
+          Github
+        </a>
         <span class="link-style">|</span>
-        <a href="#">Twitter</a>
+        <a href="https://swapi.dev/" target="_blank" rel="noopener noreferrer">
+          Star Wars API
+        </a>
       </div> 
 
       <div v-else class="settings-toggle">
@@ -72,9 +76,9 @@ export default {
           links: false
         },
         {
-          key: 'feedback',
-          name: 'Feedback',
-          sub: '',
+          key: 'links',
+          name: 'About',
+          sub: 'a star wars wordle clone using the swapi.dev api.',
           toggle: false,
           links: true
         }

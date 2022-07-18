@@ -21,9 +21,6 @@ export default {
       {
         name: 'starships',
         max: 37
-      },
-      {
-        name: 'random'
       }
     ],
     randomCategory: false,
@@ -33,10 +30,8 @@ export default {
     categoryNames(state) {
       return state.categories.map(c => c.name)
     },
-    randomCategoryId(state) {
-      const categoryMax = state.categories.find(c => c.name === state.category).max
-
-      return Math.ceil(Math.random() * categoryMax)
+    categoryMax(state) {
+      return state.categories.find(c => c.name === state.category).max
     }
   },
   mutations: {

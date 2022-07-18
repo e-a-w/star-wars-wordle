@@ -1,6 +1,7 @@
 export default {
   namespaced: true,
   state: {
+    errors: [],
     game: {
       won: null,
       lost: null,
@@ -59,6 +60,13 @@ export default {
         return state.game.loading = loading
       }
       
+    },
+    SET_ERRORS(state, errors) {
+      if (!Array.isArray(errors)) throw Error('Errors must be an array');
+
+      console.log('e:', errors)
+
+      return state.errors = errors
     }
   },
   actions: {

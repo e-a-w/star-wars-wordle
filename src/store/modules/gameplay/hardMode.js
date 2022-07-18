@@ -1,7 +1,7 @@
 export default {
   namespaced: true,
   state: {
-    hardModeOn: true,
+    hardModeOn: false,
     hardModeGuess: {
       prevGuess: [],
       currentGuess: []

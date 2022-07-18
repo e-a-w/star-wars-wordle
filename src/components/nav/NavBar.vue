@@ -3,7 +3,7 @@
     <div class="nav-icon">
       <font-awesome-icon @click="openCover('howTo')" :icon="['far', 'question-circle']"></font-awesome-icon>
     </div>
-    <h1>WORDLE</h1>
+    <h1><span>star wars</span> WORDLE</h1>
     <div class="right-icons">
       <div class="nav-icon">
         <font-awesome-icon @click="openModal" :icon="['fas', 'chart-bar']"></font-awesome-icon>
@@ -52,6 +52,16 @@
   nav h1 {
     letter-spacing: 3px;
     font-weight: 700;
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+  nav h1 span {
+    font-size: 18px;
+    font-style: italic;
+    padding: .25rem 15px 0 0;
   }
 
   .nav-icon {

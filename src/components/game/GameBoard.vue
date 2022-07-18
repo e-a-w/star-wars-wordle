@@ -1,6 +1,6 @@
 <template>
   <main>
-    <section v-if="gameLoading || !word.length">
+    <section v-if="!errors.length && (gameLoading || !word.length)">
       <p class="loading-text">Preparing game board...</p>
       <atom-spinner
         :animation-duration="1000"
@@ -37,7 +37,7 @@
     components: { AtomSpinner },
     computed: {
       ...mapState('guesses', ['guesses']),
-      ...mapState('gameState', ['currentRow', 'game', 'loading']),
+      ...mapState('gameState', ['currentRow', 'game', 'loading', 'errors']),
       ...mapState('targetWord', ['word']),
       ...mapState('styleConfig', ['contrastClass', 'darkMode']),
       ...mapGetters('gameState', ['gameLoading'])

@@ -16,7 +16,7 @@
     watch: {
       toastConfig(val) {
         if (val.show) {
-          setTimeout(() => this.$store.commit('toast/TOGGLE_TOAST'), 3000)
+          setTimeout(() => this.$store.commit('toast/TOGGLE_TOAST'), 5000)
         }
       }
     }

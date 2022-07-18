@@ -18,22 +18,32 @@ export default {
     },
   },
   actions: {
+      // eslint-disable-next-line
     async fetchWord({ commit, rootState, rootGetters }) {
+      this.commit('gameState/TOGGLE_LOADING', true)
+
       // eslint-disable-next-line
       const category = rootState.categories.category
-      const categoryId = rootGetters['categories/randomCategoryId']
+      const categoryMax = rootGetters['categories/categoryMax']
+      const categoryId = Math.ceil(Math.random() * categoryMax)
 
       try {
-        // const { data } = await axios.get(`https://swapi.dev/api/${category}/${categoryId}`)
-        // remove all whitespace
-        // const word = data?.name?.toLowerCase().trim().replace('é', 'e')
-
-        const word = 'dormé'.replace('é', 'e')
-
+        const { data } = await axios.get(`https://swapi.dev/api/${category}/${categoryId}`)
+        // // remove all whitespace
+        const word = data?.name?.toLowerCase().trim().replace('é', 'e')
+        
+        // // const word = 'dormé'.replace('é', 'e')
+        
         commit('SET_WORD', { word: word, wordId: categoryId });
         this.commit('guesses/SET_GUESSES_ARRAY', word)
+        this.commit('gameState/SET_ERRORS', [])
       } catch (error) {
-        this.commit('toast/TOGGLE_TOAST', 'ERROR')
+        const genericError = 'Error fetching word; please try again.'
+        const flakyError = 'This category is very flaky; it may take a few tries to work.'
+        const errors = ['vehicles', 'starships'].includes(category) ? [genericError, flakyError] : [genericError]
+
+        this.commit('toast/TOGGLE_TOAST', 'Error')
+        this.commit('gameState/SET_ERRORS', errors)
       }
     },
     async checkWord({ commit, rootState }) {
