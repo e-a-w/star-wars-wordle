@@ -1,24 +1,7 @@
-# word_game_vue
+# Star Wars Wordle
 
-## Project setup
-```
-yarn install
-```
+Wordle clone with words fetched from the [swapi.dev](https://swapi.dev/) API!
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+Created with Vue2.
 
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Lints and fixes files
-```
-yarn lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+<img width="876" alt="main page" src="https://user-images.githubusercontent.com/23251909/179482082-6964573b-7812-4095-adfe-b240852512b1.png">
